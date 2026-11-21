@@ -1,0 +1,1215 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#2b4c8c"><style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Путь в Японию</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@500;700;800&display=swap">
+<style>
+/* Layout: left rail (desktop) / bottom tab bar (phone), one working column; ink-on-paper with indigo (ai-iro) and a vermilion hanko accent used sparingly */
+:root{
+  --paper:#f6f7f9; --card:#ffffff; --ink:#1b1f2a; --ink-2:#4a5162; --ink-3:#7c8496;
+  --line:#e2e5ec; --ai:#2b4c8c; --ai-soft:#e6ecf7; --shu:#c8402b; --shu-soft:#fbe9e5;
+  --ok:#2e7d4f; --ok-soft:#e3f2e8; --warn:#a86a00; --warn-soft:#fbf0d9;
+  --f-ui:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-jp:"Noto Sans JP","Hiragino Sans","Yu Gothic",sans-serif;
+  --f-kanji:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho",serif;
+  --r:10px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#12151c; --card:#1a1e28; --ink:#e8eaf0; --ink-2:#b4bac8; --ink-3:#818a9c;
+  --line:#2a3040; --ai:#8fb0ec; --ai-soft:#1f2a42; --shu:#ec7a63; --shu-soft:#3a201b;
+  --ok:#6cc690; --ok-soft:#183223; --warn:#e2b45a; --warn-soft:#332811; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#12151c; --card:#1a1e28; --ink:#e8eaf0; --ink-2:#b4bac8; --ink-3:#818a9c;
+  --line:#2a3040; --ai:#8fb0ec; --ai-soft:#1f2a42; --shu:#ec7a63; --shu-soft:#3a201b;
+  --ok:#6cc690; --ok-soft:#183223; --warn:#e2b45a; --warn-soft:#332811; color-scheme:dark}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-ui);font-size:15px;line-height:1.55}
+.jp{font-family:var(--f-jp)}
+.kj{font-family:var(--f-kanji)}
+a{color:var(--ai)}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--ai);outline-offset:2px}
+h1,h2,h3{text-wrap:balance;margin:0;line-height:1.2}
+h1{font-size:1.75rem;font-weight:800;letter-spacing:-.01em}
+h2{font-size:1.2rem;font-weight:700}
+h3{font-size:1rem;font-weight:700}
+p{margin:0}
+.app{display:grid;grid-template-columns:232px 1fr;min-height:100%}
+.rail{position:sticky;top:env(safe-area-inset-top,0px);height:100vh;border-right:1px solid var(--line);padding:22px 14px;display:flex;flex-direction:column;gap:4px;background:var(--card)}
+.brand{display:flex;align-items:center;gap:10px;padding:0 8px 18px}
+.hanko{width:38px;height:38px;border-radius:8px;background:var(--shu);color:#fff;display:grid;place-items:center;font-family:var(--f-kanji);font-weight:800;font-size:20px;flex:none}
+.brand b{display:block;font-size:15px}
+.brand small{color:var(--ink-3);font-size:12px}
+.nav a{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;text-decoration:none;color:var(--ink-2);font-weight:600}
+.nav a .g{font-family:var(--f-kanji);width:22px;text-align:center;font-size:17px;color:var(--ink-3)}
+.nav a:hover{background:var(--paper)}
+.nav a.on{background:var(--ai-soft);color:var(--ai)}
+.nav a.on .g{color:var(--ai)}
+.rail .sync{margin-top:auto;font-size:12px;color:var(--ink-3);padding:8px 10px;display:flex;gap:8px;align-items:center}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--ink-3);flex:none}
+.dot.ok{background:var(--ok)} .dot.err{background:var(--shu)}
+main{min-width:0;padding-block:28px 60px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1040px;margin:0 auto;display:flex;flex-direction:column;gap:22px}
+.head{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:12px}
+.eyebrow{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);font-weight:700}
+.sub{color:var(--ink-2);max-width:68ch}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.btn{border:1px solid var(--line);background:var(--card);padding:8px 14px;border-radius:8px;font-weight:600}
+.btn:hover{border-color:var(--ink-3)}
+.btn.pri{background:var(--ai);border-color:var(--ai);color:var(--card)}
+.btn.pri:hover{filter:brightness(1.08)}
+.btn.sm{padding:5px 10px;font-size:13px}
+.btn:disabled{opacity:.5;cursor:default}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;padding:3px 9px;border-radius:99px;background:var(--paper);color:var(--ink-2);border:1px solid var(--line)}
+.chip.ai{background:var(--ai-soft);color:var(--ai);border-color:transparent}
+.chip.shu{background:var(--shu-soft);color:var(--shu);border-color:transparent}
+.chip.ok{background:var(--ok-soft);color:var(--ok);border-color:transparent}
+.chip.warn{background:var(--warn-soft);color:var(--warn);border-color:transparent}
+.stat b{display:block;font-size:1.7rem;font-weight:800;font-variant-numeric:tabular-nums;line-height:1.1}
+.stat span{font-size:13px;color:var(--ink-3)}
+.bar{height:8px;background:var(--paper);border-radius:99px;overflow:hidden;border:1px solid var(--line)}
+.bar i{display:block;height:100%;background:var(--ai);border-radius:99px}
+.muted{color:var(--ink-3)}
+.small{font-size:13px}
+input[type=text],input[type=number],input[type=date],select,textarea{font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+textarea{width:100%;resize:vertical;min-height:80px}
+/* tasks */
+.task{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:start;padding:12px 0;border-top:1px solid var(--line)}
+.task:first-child{border-top:0}
+.tick{width:24px;height:24px;border-radius:6px;border:2px solid var(--ink-3);background:transparent;display:grid;place-items:center;padding:0;margin-top:1px}
+.tick.on{background:var(--ok);border-color:var(--ok);color:var(--card)}
+.task.done .tt{text-decoration:line-through;color:var(--ink-3)}
+.tt{font-weight:700}
+.td{font-size:13px;color:var(--ink-2)}
+.tmin{font-size:12px;color:var(--ink-3);font-variant-numeric:tabular-nums;white-space:nowrap}
+/* timeline */
+.phase{display:grid;grid-template-columns:64px 1fr;gap:16px;position:relative}
+.phase .num{font-family:var(--f-kanji);font-size:30px;font-weight:800;color:var(--ink-3);text-align:center;line-height:1}
+.phase.cur .num{color:var(--shu)}
+.phase.cur>.card{border-color:var(--ai);box-shadow:0 0 0 1px var(--ai)}
+.ul{margin:6px 0 0;padding-left:18px;display:flex;flex-direction:column;gap:3px}
+.ms{display:flex;gap:10px;align-items:center;padding:6px 0}
+/* kana */
+.kgrid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.kcell{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 4px;text-align:center}
+.kcell button{all:unset;cursor:pointer;display:block;width:100%}
+.kcell .k{font-family:var(--f-jp);font-size:26px;line-height:1.2}
+.kcell .r{font-size:12px;color:var(--ink-3)}
+.kcell.empty{visibility:hidden}
+.kcell.l{border-color:var(--ok)}
+.tabs{display:flex;gap:4px;background:var(--paper);border:1px solid var(--line);border-radius:9px;padding:3px;flex-wrap:wrap}
+.tabs button{border:0;background:transparent;padding:6px 12px;border-radius:7px;font-weight:600;color:var(--ink-2)}
+.tabs button.on{background:var(--card);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+/* flashcard */
+.fc{min-height:300px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;padding:28px 18px}
+.fc .front{font-size:64px;line-height:1.15;font-family:var(--f-jp);word-break:break-word}
+.fc .front.kanji{font-family:var(--f-kanji);font-size:96px}
+.fc .back{display:flex;flex-direction:column;gap:6px;align-items:center}
+.fc .rd{font-family:var(--f-jp);font-size:22px;color:var(--ai)}
+.fc .mn{font-size:20px;font-weight:700}
+.grades{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.grades button{border:1px solid var(--line);background:var(--card);border-radius:8px;padding:10px 4px;font-weight:700}
+.grades button small{display:block;font-weight:500;color:var(--ink-3);font-size:12px}
+.grades .again{color:var(--shu)} .grades .good{color:var(--ok)}
+.quiz-in{font-size:22px;text-align:center;width:min(280px,100%)}
+/* grammar */
+.gp summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:12px;justify-content:space-between}
+.gp summary::-webkit-details-marker{display:none}
+.gp[open] summary{margin-bottom:12px}
+.pat{font-family:var(--f-jp);background:var(--ai-soft);color:var(--ai);padding:2px 8px;border-radius:6px;font-weight:700}
+.ex{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;padding:8px 0;border-top:1px dashed var(--line);align-items:start}
+.ex .j{font-family:var(--f-jp);font-size:17px}
+.ex .t{color:var(--ink-2);font-size:14px;grid-column:2}
+.say{border:1px solid var(--line);background:var(--card);border-radius:50%;width:30px;height:30px;padding:0;display:grid;place-items:center;flex:none;color:var(--ai)}
+.say svg{width:15px;height:15px}
+/* tables */
+.tbl-wrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
+th{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3);font-weight:700}
+td.j{font-family:var(--f-jp);font-size:17px;white-space:nowrap}
+/* chat */
+.chat{display:flex;flex-direction:column;gap:12px;max-height:56vh;overflow-y:auto;padding:4px}
+.msg{max-width:85%;padding:10px 14px;border-radius:12px;white-space:pre-wrap;word-break:break-word}
+.msg.u{align-self:flex-end;background:var(--ai);color:var(--card);border-bottom-right-radius:4px}
+.msg.a{align-self:flex-start;background:var(--paper);border:1px solid var(--line);border-bottom-left-radius:4px;font-family:var(--f-ui)}
+.msg.a .jpx{font-family:var(--f-jp)}
+.modes button{border:1px solid var(--line);background:var(--card);padding:6px 12px;border-radius:99px;font-weight:600;font-size:13px}
+.modes button.on{background:var(--ink);color:var(--card);border-color:var(--ink)}
+/* chart */
+svg text{fill:var(--ink-3);font-family:var(--f-ui)}
+.res{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;padding:10px 0;border-top:1px solid var(--line)}
+.res:first-of-type{border-top:0}
+.res a{font-weight:700}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--card);padding:10px 16px;border-radius:8px;font-weight:600;z-index:50;font-size:14px}
+.big-kanji{font-family:var(--f-kanji);font-size:44px;line-height:1}
+@media (max-width:900px){.g4{grid-template-columns:repeat(2,minmax(0,1fr))}.g3{grid-template-columns:1fr 1fr}}
+@media (max-width:760px){
+  .app{grid-template-columns:1fr}
+  .rail{position:fixed;top:auto;bottom:0;left:0;right:0;height:auto;flex-direction:row;border-right:0;border-top:1px solid var(--line);padding:6px max(6px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(6px,env(safe-area-inset-left,0px));z-index:20;overflow-x:auto;gap:0}
+  .brand,.rail .sync{display:none}
+  .nav{display:flex;width:100%;justify-content:space-between}
+  .nav a{flex:1 1 0;min-width:0;flex-direction:column;gap:0;padding:4px 2px;font-size:10px;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .nav a .g{font-size:18px}
+  main{padding-bottom:100px}
+  .g2,.g3{grid-template-columns:1fr}
+  .phase{grid-template-columns:1fr}
+  .phase .num{text-align:left}
+  .fc .front{font-size:48px}.fc .front.kanji{font-size:76px}
+  h1{font-size:1.45rem}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head><body>
+
+<div class="app">
+  <nav class="rail" aria-label="Разделы">
+    <div class="brand"><div class="hanko">道</div><div><b>Путь в Японию</b><small>日本語・18 месяцев</small></div></div>
+    <div class="nav" id="nav"></div>
+    <div class="sync"><span class="dot" id="syncDot"></span><span id="syncText">Сохраняется в браузере</span></div>
+  </nav>
+  <main><div class="wrap" id="view"></div></main>
+</div>
+<div class="toast" id="toast" hidden></div>
+<script>
+// ===== DATA =====
+const KANA_ROWS = [
+  // [group, romaji (space-separated, _ = empty), hiragana, katakana]
+  ["base","a i u e o","あいうえお","アイウエオ"],
+  ["base","ka ki ku ke ko","かきくけこ","カキクケコ"],
+  ["base","sa shi su se so","さしすせそ","サシスセソ"],
+  ["base","ta chi tsu te to","たちつてと","タチツテト"],
+  ["base","na ni nu ne no","なにぬねの","ナニヌネノ"],
+  ["base","ha hi fu he ho","はひふへほ","ハヒフヘホ"],
+  ["base","ma mi mu me mo","まみむめも","マミムメモ"],
+  ["base","ya _ yu _ yo","や_ゆ_よ","ヤ_ユ_ヨ"],
+  ["base","ra ri ru re ro","らりるれろ","ラリルレロ"],
+  ["base","wa _ _ _ wo","わ___を","ワ___ヲ"],
+  ["base","n _ _ _ _","ん____","ン____"],
+  ["dak","ga gi gu ge go","がぎぐげご","ガギグゲゴ"],
+  ["dak","za ji zu ze zo","ざじずぜぞ","ザジズゼゾ"],
+  ["dak","da ji zu de do","だぢづでど","ダヂヅデド"],
+  ["dak","ba bi bu be bo","ばびぶべぼ","バビブベボ"],
+  ["dak","pa pi pu pe po","ぱぴぷぺぽ","パピプペポ"],
+];
+const YOON = [
+  ["kya","きゃ","キャ"],["kyu","きゅ","キュ"],["kyo","きょ","キョ"],
+  ["sha","しゃ","シャ"],["shu","しゅ","シュ"],["sho","しょ","ショ"],
+  ["cha","ちゃ","チャ"],["chu","ちゅ","チュ"],["cho","ちょ","チョ"],
+  ["nya","にゃ","ニャ"],["nyu","にゅ","ニュ"],["nyo","にょ","ニョ"],
+  ["hya","ひゃ","ヒャ"],["hyu","ひゅ","ヒュ"],["hyo","ひょ","ヒョ"],
+  ["mya","みゃ","ミャ"],["myu","みゅ","ミュ"],["myo","みょ","ミョ"],
+  ["rya","りゃ","リャ"],["ryu","りゅ","リュ"],["ryo","りょ","リョ"],
+  ["gya","ぎゃ","ギャ"],["gyu","ぎゅ","ギュ"],["gyo","ぎょ","ギョ"],
+  ["ja","じゃ","ジャ"],["ju","じゅ","ジュ"],["jo","じょ","ジョ"],
+  ["bya","びゃ","ビャ"],["byu","びゅ","ビュ"],["byo","びょ","ビョ"],
+  ["pya","ぴゃ","ピャ"],["pyu","ぴゅ","ピュ"],["pyo","ぴょ","ピョ"],
+];
+// flatten kana to list of {r, h, k, g}
+const KANA = [];
+KANA_ROWS.forEach(([g, rs, hs, ks]) => {
+  const r = rs.split(" "), h = [...hs], k = [...ks];
+  r.forEach((x, i) => { if (x !== "_") KANA.push({ r: x, h: h[i], k: k[i], g }); });
+});
+YOON.forEach(([r, h, k]) => KANA.push({ r, h, k, g: "yoon" }));
+
+// Vocabulary: kanji|kana|перевод|тема  (N5 core, ordered for learning)
+const VOCAB_RAW = `
+私|わたし|я|люди
+あなた|あなた|ты, вы|люди
+人|ひと|человек|люди
+友達|ともだち|друг|люди
+先生|せんせい|учитель|люди
+学生|がくせい|студент|люди
+家族|かぞく|семья|люди
+父|ちち|(мой) папа|люди
+母|はは|(моя) мама|люди
+お父さん|おとうさん|папа (чужой / обращение)|люди
+お母さん|おかあさん|мама (чужая / обращение)|люди
+兄|あに|(мой) старший брат|люди
+姉|あね|(моя) старшая сестра|люди
+弟|おとうと|младший брат|люди
+妹|いもうと|младшая сестра|люди
+子供|こども|ребёнок|люди
+男|おとこ|мужчина|люди
+女|おんな|женщина|люди
+名前|なまえ|имя|люди
+こんにちは|こんにちは|здравствуйте|фразы
+おはようございます|おはようございます|доброе утро|фразы
+こんばんは|こんばんは|добрый вечер|фразы
+ありがとう|ありがとう|спасибо|фразы
+すみません|すみません|извините; простите (позвать)|фразы
+ごめんなさい|ごめんなさい|простите (виноват)|фразы
+お願いします|おねがいします|пожалуйста (прошу)|фразы
+はい|はい|да|фразы
+いいえ|いいえ|нет|фразы
+さようなら|さようなら|до свидания|фразы
+いただきます|いただきます|приятного аппетита (перед едой)|фразы
+ごちそうさまでした|ごちそうさまでした|спасибо за еду|фразы
+これ|これ|это (возле меня)|указатели
+それ|それ|это (возле тебя)|указатели
+あれ|あれ|вон то|указатели
+どれ|どれ|который?|указатели
+ここ|ここ|здесь|указатели
+そこ|そこ|там (возле тебя)|указатели
+あそこ|あそこ|вон там|указатели
+どこ|どこ|где?|указатели
+何|なに|что?|вопросы
+誰|だれ|кто?|вопросы
+いつ|いつ|когда?|вопросы
+どう|どう|как?|вопросы
+どうして|どうして|почему?|вопросы
+いくら|いくら|сколько стоит?|вопросы
+いくつ|いくつ|сколько штук? сколько лет?|вопросы
+一|いち|один|числа
+二|に|два|числа
+三|さん|три|числа
+四|よん|четыре|числа
+五|ご|пять|числа
+六|ろく|шесть|числа
+七|なな|семь|числа
+八|はち|восемь|числа
+九|きゅう|девять|числа
+十|じゅう|десять|числа
+百|ひゃく|сто|числа
+千|せん|тысяча|числа
+万|まん|десять тысяч|числа
+円|えん|иена|числа
+今日|きょう|сегодня|время
+明日|あした|завтра|время
+昨日|きのう|вчера|время
+今|いま|сейчас|время
+毎日|まいにち|каждый день|время
+朝|あさ|утро|время
+昼|ひる|день, полдень|время
+晩|ばん|вечер|время
+夜|よる|ночь|время
+時間|じかん|время, час (длительность)|время
+週|しゅう|неделя|время
+今週|こんしゅう|эта неделя|время
+来週|らいしゅう|следующая неделя|время
+先週|せんしゅう|прошлая неделя|время
+月|つき|месяц; луна|время
+年|とし|год; возраст|время
+今年|ことし|этот год|время
+来年|らいねん|следующий год|время
+午前|ごぜん|до полудня, a.m.|время
+午後|ごご|после полудня, p.m.|время
+月曜日|げつようび|понедельник|время
+火曜日|かようび|вторник|время
+水曜日|すいようび|среда|время
+木曜日|もくようび|четверг|время
+金曜日|きんようび|пятница|время
+土曜日|どようび|суббота|время
+日曜日|にちようび|воскресенье|время
+家|いえ|дом|места
+部屋|へや|комната|места
+学校|がっこう|школа|места
+大学|だいがく|университет|места
+教室|きょうしつ|класс, аудитория|места
+会社|かいしゃ|компания, фирма|места
+駅|えき|станция|места
+店|みせ|магазин|места
+銀行|ぎんこう|банк|места
+病院|びょういん|больница|места
+図書館|としょかん|библиотека|места
+公園|こうえん|парк|места
+郵便局|ゆうびんきょく|почта|места
+国|くに|страна|места
+日本|にほん|Япония|места
+東京|とうきょう|Токио|места
+道|みち|дорога|места
+町|まち|город, район|места
+食べ物|たべもの|еда|еда
+飲み物|のみもの|напиток|еда
+ご飯|ごはん|рис; еда|еда
+パン|パン|хлеб|еда
+肉|にく|мясо|еда
+魚|さかな|рыба|еда
+野菜|やさい|овощи|еда
+果物|くだもの|фрукты|еда
+卵|たまご|яйцо|еда
+水|みず|вода|еда
+お茶|おちゃ|чай (зелёный)|еда
+コーヒー|コーヒー|кофе|еда
+牛乳|ぎゅうにゅう|молоко|еда
+お酒|おさけ|алкоголь, сакэ|еда
+朝ご飯|あさごはん|завтрак|еда
+昼ご飯|ひるごはん|обед|еда
+晩ご飯|ばんごはん|ужин|еда
+本|ほん|книга|вещи
+新聞|しんぶん|газета|вещи
+辞書|じしょ|словарь|вещи
+鉛筆|えんぴつ|карандаш|вещи
+紙|かみ|бумага|вещи
+机|つくえ|стол (письменный)|вещи
+椅子|いす|стул|вещи
+鞄|かばん|сумка|вещи
+傘|かさ|зонт|вещи
+時計|とけい|часы|вещи
+電話|でんわ|телефон|вещи
+携帯|けいたい|мобильный телефон|вещи
+写真|しゃしん|фотография|вещи
+お金|おかね|деньги|вещи
+切符|きっぷ|билет|вещи
+車|くるま|машина|транспорт
+電車|でんしゃ|электричка|транспорт
+自転車|じてんしゃ|велосипед|транспорт
+バス|バス|автобус|транспорт
+飛行機|ひこうき|самолёт|транспорт
+地下鉄|ちかてつ|метро|транспорт
+天気|てんき|погода|природа
+雨|あめ|дождь|природа
+雪|ゆき|снег|природа
+山|やま|гора|природа
+川|かわ|река|природа
+海|うみ|море|природа
+花|はな|цветок|природа
+木|き|дерево|природа
+空|そら|небо|природа
+犬|いぬ|собака|природа
+猫|ねこ|кошка|природа
+春|はる|весна|природа
+夏|なつ|лето|природа
+秋|あき|осень|природа
+冬|ふゆ|зима|природа
+目|め|глаз|тело
+耳|みみ|ухо|тело
+口|くち|рот|тело
+手|て|рука (кисть)|тело
+足|あし|нога|тело
+頭|あたま|голова|тело
+体|からだ|тело|тело
+日本語|にほんご|японский язык|учёба
+英語|えいご|английский язык|учёба
+言葉|ことば|слово, язык|учёба
+漢字|かんじ|кандзи (иероглифы)|учёба
+宿題|しゅくだい|домашнее задание|учёба
+試験|しけん|экзамен|учёба
+質問|しつもん|вопрос|учёба
+勉強|べんきょう|учёба|учёба
+仕事|しごと|работа|учёба
+大きい|おおきい|большой|прилагательные
+小さい|ちいさい|маленький|прилагательные
+新しい|あたらしい|новый|прилагательные
+古い|ふるい|старый (о вещах)|прилагательные
+高い|たかい|высокий; дорогой|прилагательные
+安い|やすい|дешёвый|прилагательные
+低い|ひくい|низкий|прилагательные
+長い|ながい|длинный|прилагательные
+短い|みじかい|короткий|прилагательные
+良い|いい|хороший|прилагательные
+悪い|わるい|плохой|прилагательные
+暑い|あつい|жаркий (о погоде)|прилагательные
+寒い|さむい|холодный (о погоде)|прилагательные
+冷たい|つめたい|холодный (на ощупь)|прилагательные
+難しい|むずかしい|трудный|прилагательные
+易しい|やさしい|лёгкий, простой|прилагательные
+面白い|おもしろい|интересный, смешной|прилагательные
+楽しい|たのしい|весёлый, приятный|прилагательные
+美味しい|おいしい|вкусный|прилагательные
+忙しい|いそがしい|занятой|прилагательные
+多い|おおい|многочисленный|прилагательные
+少ない|すくない|немногочисленный|прилагательные
+早い|はやい|ранний|прилагательные
+速い|はやい|быстрый|прилагательные
+遠い|とおい|далёкий|прилагательные
+近い|ちかい|близкий|прилагательные
+白い|しろい|белый|прилагательные
+黒い|くろい|чёрный|прилагательные
+赤い|あかい|красный|прилагательные
+青い|あおい|синий|прилагательные
+好き|すき|нравится, любимый|прилагательные
+嫌い|きらい|не нравится|прилагательные
+元気|げんき|здоровый, бодрый|прилагательные
+静か|しずか|тихий|прилагательные
+有名|ゆうめい|знаменитый|прилагательные
+綺麗|きれい|красивый; чистый|прилагательные
+便利|べんり|удобный|прилагательные
+大丈夫|だいじょうぶ|в порядке, нормально|прилагательные
+上手|じょうず|умелый|прилагательные
+下手|へた|неумелый|прилагательные
+暇|ひま|свободный (время)|прилагательные
+行く|いく|идти, ехать|глаголы
+来る|くる|приходить|глаголы
+帰る|かえる|возвращаться домой|глаголы
+食べる|たべる|есть|глаголы
+飲む|のむ|пить|глаголы
+見る|みる|смотреть|глаголы
+聞く|きく|слушать; спрашивать|глаголы
+読む|よむ|читать|глаголы
+書く|かく|писать|глаголы
+話す|はなす|говорить|глаголы
+言う|いう|сказать|глаголы
+する|する|делать|глаголы
+買う|かう|покупать|глаголы
+売る|うる|продавать|глаголы
+会う|あう|встречаться|глаголы
+待つ|まつ|ждать|глаголы
+起きる|おきる|вставать, просыпаться|глаголы
+寝る|ねる|спать, ложиться спать|глаголы
+分かる|わかる|понимать|глаголы
+ある|ある|быть, иметься (неодуш.)|глаголы
+いる|いる|быть, находиться (одуш.)|глаголы
+住む|すむ|жить (где-то)|глаголы
+働く|はたらく|работать|глаголы
+休む|やすむ|отдыхать|глаголы
+始まる|はじまる|начинаться|глаголы
+終わる|おわる|заканчиваться|глаголы
+入る|はいる|входить|глаголы
+出る|でる|выходить|глаголы
+乗る|のる|садиться (в транспорт)|глаголы
+降りる|おりる|выходить (из транспорта)|глаголы
+歩く|あるく|ходить пешком|глаголы
+走る|はしる|бегать|глаголы
+泳ぐ|およぐ|плавать|глаголы
+作る|つくる|делать, готовить|глаголы
+使う|つかう|использовать|глаголы
+持つ|もつ|держать, иметь|глаголы
+知る|しる|узнать (知っている — знать)|глаголы
+教える|おしえる|учить, объяснять|глаголы
+習う|ならう|учиться (у кого-то)|глаголы
+覚える|おぼえる|запоминать|глаголы
+忘れる|わすれる|забывать|глаголы
+開ける|あける|открывать|глаголы
+閉める|しめる|закрывать|глаголы
+付ける|つける|включать|глаголы
+消す|けす|выключать, стирать|глаголы
+あげる|あげる|давать (от меня)|глаголы
+もらう|もらう|получать|глаголы
+くれる|くれる|давать (мне)|глаголы
+遊ぶ|あそぶ|играть, гулять|глаголы
+撮る|とる|фотографировать|глаголы
+洗う|あらう|мыть|глаголы
+`.trim().split("\n").map((l, i) => { const [w, r, m, t] = l.split("|"); return { id: "vo" + i, w, r, m, t }; });
+
+// Kanji: char|on|kun|значение
+const KANJI_RAW = `
+一|イチ・イツ|ひと(つ)|один
+二|ニ|ふた(つ)|два
+三|サン|みっ(つ)|три
+四|シ|よ・よん・よっ(つ)|четыре
+五|ゴ|いつ(つ)|пять
+六|ロク|むっ(つ)|шесть
+七|シチ|なな(つ)|семь
+八|ハチ|やっ(つ)|восемь
+九|キュウ・ク|ここの(つ)|девять
+十|ジュウ|とお|десять
+百|ヒャク|—|сто
+千|セン|ち|тысяча
+万|マン・バン|—|десять тысяч
+円|エン|まる(い)|иена; круг
+日|ニチ・ジツ|ひ・か|день; солнце
+月|ゲツ・ガツ|つき|месяц; луна
+火|カ|ひ|огонь
+水|スイ|みず|вода
+木|モク・ボク|き|дерево
+金|キン・コン|かね|золото; деньги
+土|ド・ト|つち|земля
+年|ネン|とし|год
+時|ジ|とき|время; час
+分|ブン・フン|わ(かる)|минута; часть; понимать
+半|ハン|なか(ば)|половина
+今|コン・キン|いま|сейчас
+週|シュウ|—|неделя
+毎|マイ|—|каждый
+午|ゴ|—|полдень
+先|セン|さき|прежде; впереди
+生|セイ・ショウ|い(きる)・う(まれる)|жизнь; рождаться
+学|ガク|まな(ぶ)|учиться
+校|コウ|—|школа
+人|ジン・ニン|ひと|человек
+大|ダイ・タイ|おお(きい)|большой
+小|ショウ|ちい(さい)・こ|маленький
+中|チュウ|なか|середина; внутри
+上|ジョウ|うえ・あ(がる)|верх
+下|カ・ゲ|した・さ(がる)|низ
+左|サ|ひだり|лево
+右|ウ・ユウ|みぎ|право
+前|ゼン|まえ|перед; до
+後|ゴ・コウ|あと・うし(ろ)|после; сзади
+外|ガイ|そと|снаружи
+名|メイ・ミョウ|な|имя
+目|モク|め|глаз
+口|コウ|くち|рот
+耳|ジ|みみ|ухо
+手|シュ|て|рука
+足|ソク|あし|нога
+山|サン|やま|гора
+川|セン|かわ|река
+田|デン|た|рисовое поле
+天|テン|あめ|небо
+気|キ|—|дух; энергия
+雨|ウ|あめ|дождь
+電|デン|—|электричество
+車|シャ|くるま|машина; колесо
+道|ドウ|みち|дорога
+店|テン|みせ|магазин
+駅|エキ|—|станция
+国|コク|くに|страна
+語|ゴ|かた(る)|язык; слово
+本|ホン|もと|книга; основа
+見|ケン|み(る)|смотреть
+行|コウ・ギョウ|い(く)|идти
+来|ライ|く(る)|приходить
+出|シュツ|で(る)・だ(す)|выходить
+入|ニュウ|はい(る)・い(れる)|входить
+休|キュウ|やす(む)|отдыхать
+食|ショク|た(べる)|есть, еда
+飲|イン|の(む)|пить
+言|ゲン・ゴン|い(う)|сказать
+話|ワ|はな(す)・はなし|говорить; рассказ
+読|ドク|よ(む)|читать
+書|ショ|か(く)|писать
+聞|ブン|き(く)|слышать; спрашивать
+買|バイ|か(う)|покупать
+会|カイ|あ(う)|встречаться
+立|リツ|た(つ)|стоять
+男|ダン・ナン|おとこ|мужчина
+女|ジョ・ニョ|おんな|женщина
+子|シ|こ|ребёнок
+父|フ|ちち|отец
+母|ボ|はは|мать
+友|ユウ|とも|друг
+何|カ|なに・なん|что
+高|コウ|たか(い)|высокий; дорогой
+安|アン|やす(い)|дешёвый; спокойный
+新|シン|あたら(しい)|новый
+古|コ|ふる(い)|старый
+長|チョウ|なが(い)|длинный; глава
+白|ハク|しろ(い)|белый
+多|タ|おお(い)|много
+少|ショウ|すく(ない)・すこ(し)|мало
+間|カン・ケン|あいだ・ま|промежуток
+東|トウ|ひがし|восток
+西|セイ・サイ|にし|запад
+南|ナン|みなみ|юг
+北|ホク|きた|север
+`.trim().split("\n").map((l, i) => { const [c, on, kun, m] = l.split("|"); return { id: "kj" + i, c, on, kun, m }; });
+
+// Grammar (N5 core path)
+const GRAMMAR = [
+ {id:"g1",lvl:"N5",pat:"AはBです",title:"А — это Б",ex:"Базовое предложение. は (читается «ва») отмечает тему: «что касается А». です — вежливая связка «есть/является». Отрицание: じゃありません (или ではありません).",s:[["わたしはがくせいです。","Я студент."],["これはほんです。","Это книга."],["たなかさんはせんせいじゃありません。","Танака-сан не учитель."]]},
+ {id:"g2",lvl:"N5",pat:"〜か",title:"Вопрос частицей か",ex:"Добавьте か в конец — получится вопрос. Порядок слов не меняется, интонация вверх.",s:[["がくせいですか。","Вы студент?"],["これはなんですか。","Что это?"],["トイレはどこですか。","Где туалет?"]]},
+ {id:"g3",lvl:"N5",pat:"AのB",title:"Принадлежность の",ex:"の связывает два существительных: «Б, принадлежащий А» или «Б, относящийся к А». Часто переводится родительным падежом.",s:[["わたしのほん","моя книга"],["にほんごのせんせい","учитель японского"],["ともだちのかばんです。","Это сумка друга."]]},
+ {id:"g4",lvl:"N5",pat:"も",title:"Тоже: も",ex:"も заменяет は или が и значит «тоже». С отрицанием — «тоже не».",s:[["わたしもがくせいです。","Я тоже студент."],["ねこもすきです。","Кошек я тоже люблю."]]},
+ {id:"g5",lvl:"N5",pat:"これ・それ・あれ・どれ",title:"Ко-со-а-до",ex:"Система указателей: こ — у говорящего, そ — у собеседника, あ — далеко от обоих, ど — вопрос. Работает для これ/ここ/この/こちら и т.д.",s:[["それはなんですか。","Что это (у тебя)?"],["あのひとはだれですか。","Кто вон тот человек?"],["えきはあそこです。","Станция вон там."]]},
+ {id:"g6",lvl:"N5",pat:"〜ます / 〜ません",title:"Вежливая форма глагола",ex:"Вежливое настоящее-будущее время: 食べます. Отрицание: 食べません. Прошедшее: 食べました, отрицание прошедшего: 食べませんでした. Начинайте с этой формы — её используют с незнакомыми людьми и в школе.",s:[["まいにちにほんごをべんきょうします。","Каждый день учу японский."],["あしたがっこうへいきません。","Завтра не пойду в школу."],["きのうすしをたべました。","Вчера ел суши."]]},
+ {id:"g7",lvl:"N5",pat:"を",title:"Прямой объект を",ex:"を (читается «о») отмечает то, над чем совершается действие — как винительный падеж.",s:[["みずをのみます。","Пью воду."],["ほんをよみます。","Читаю книгу."]]},
+ {id:"g8",lvl:"N5",pat:"に / へ",title:"Направление и время",ex:"に/へ — куда двигаться (へ читается «э»). に также отмечает точное время: 7時に. Со словами 今日, 明日, 毎日 に не ставится.",s:[["とうきょうへいきます。","Еду в Токио."],["しちじにおきます。","Встаю в 7 часов."],["にほんにすんでいます。","Живу в Японии."]]},
+ {id:"g9",lvl:"N5",pat:"で",title:"Место действия и средство",ex:"で — где происходит действие (не просто нахождение) и чем/на чём оно совершается.",s:[["としょかんでべんきょうします。","Занимаюсь в библиотеке."],["でんしゃでいきます。","Еду на электричке."],["はしでたべます。","Ем палочками."]]},
+ {id:"g10",lvl:"N5",pat:"あります / います",title:"Есть, находится",ex:"あります — для неодушевлённых предметов и растений, います — для людей и животных. Место отмечается に: つくえのうえにほんがあります.",s:[["へやにねこがいます。","В комнате есть кошка."],["えきのちかくにぎんこうがあります。","Рядом со станцией есть банк."]]},
+ {id:"g11",lvl:"N5",pat:"が",title:"Подлежащее が",ex:"が отмечает подлежащее, особенно новую информацию, ответ на «кто/что?», а также объект при 好き, 分かる, ある. Разница は/が — одна из главных тем; сначала просто запоминайте шаблоны.",s:[["だれがきましたか。","Кто пришёл?"],["わたしはねこがすきです。","Я люблю кошек."],["にほんごがわかります。","Понимаю японский."]]},
+ {id:"g12",lvl:"N5",pat:"い-прил. / な-прил.",title:"Два типа прилагательных",ex:"い-прилагательные: 高い → 高くない (не), 高かった (был). な-прилагательные ведут себя как существительные: 静かです, 静かじゃない, 静かな部屋.",s:[["このかばんはたかいです。","Эта сумка дорогая."],["きのうはさむかったです。","Вчера было холодно."],["しずかなこうえんですね。","Тихий парк, правда?"]]},
+ {id:"g13",lvl:"N5",pat:"〜て-форма",title:"Те-форма глагола",ex:"Ключевая форма. Правила для глаголов группы 1 (по окончанию): う・つ・る→って, む・ぶ・ぬ→んで, く→いて, ぐ→いで, す→して. Исключение: 行く→行って. Группа 2: る→て. する→して, くる→きて.",s:[["かう → かって","покупать"],["のむ → のんで","пить"],["かく → かいて","писать"]]},
+ {id:"g14",lvl:"N5",pat:"〜てください",title:"Просьба",ex:"Те-форма + ください — вежливая просьба «пожалуйста, сделайте».",s:[["ちょっとまってください。","Подождите немного, пожалуйста."],["もういちどいってください。","Повторите, пожалуйста."],["ゆっくりはなしてください。","Говорите медленнее, пожалуйста."]]},
+ {id:"g15",lvl:"N5",pat:"〜ています",title:"Длящееся действие и состояние",ex:"Те-форма + います: процесс сейчас (читаю) или результат-состояние (женат, живу, знаю).",s:[["いまテレビをみています。","Сейчас смотрю телевизор."],["とうきょうにすんでいます。","Живу в Токио."],["しっています。","Знаю."]]},
+ {id:"g16",lvl:"N5",pat:"〜てもいいです / 〜てはいけません",title:"Можно / нельзя",ex:"Те-форма + もいいです — разрешение. Те-форма + はいけません — запрет.",s:[["しゃしんをとってもいいですか。","Можно сфотографировать?"],["ここでたばこをすってはいけません。","Здесь нельзя курить."]]},
+ {id:"g17",lvl:"N5",pat:"〜たい",title:"Хочу сделать",ex:"Основа ます-формы + たい: 食べます → 食べたい. Спрягается как い-прилагательное: 食べたくない.",s:[["にほんへいきたいです。","Хочу поехать в Японию."],["なにがたべたいですか。","Что хочешь поесть?"]]},
+ {id:"g18",lvl:"N5",pat:"〜ましょう / 〜ませんか",title:"Предложение",ex:"〜ましょう — «давайте». 〜ませんか — вежливое приглашение «не хотите ли?».",s:[["いっしょにたべましょう。","Давай поедим вместе."],["えいがをみませんか。","Не хотите посмотреть фильм?"]]},
+ {id:"g19",lvl:"N5",pat:"から / けど",title:"Потому что / но",ex:"Предложение + から — причина. Предложение + けど (が) — противопоставление.",s:[["あついですから、まどをあけます。","Жарко, поэтому открою окно."],["たかいですけど、おいしいです。","Дорого, но вкусно."]]},
+ {id:"g20",lvl:"N5",pat:"простая форма (辞書形)",title:"Простая форма",ex:"Словарная форма (食べる, 行く) и её отрицание 〜ない (食べない, 行かない). Нужна для разговора с друзьями и для грамматики N4: 〜と思う, 〜ことができる и др. Группа 1: последняя у→あ + ない (書く→書かない, 買う→買わない). Группа 2: る→ない. する→しない, くる→こない, ある→ない.",s:[["あした、がっこういく？","Завтра в школу пойдёшь?"],["ううん、いかない。","Не, не пойду."]]},
+ {id:"g21",lvl:"N5",pat:"〜た (прошедшее)",title:"Простое прошедшее",ex:"Строится как те-форма, только て→た, で→だ: 食べた, 飲んだ, 行った.",s:[["きのうなにした？","Что делал вчера?"],["えいがをみた。","Смотрел фильм."]]},
+ {id:"g22",lvl:"N5",pat:"〜ことがあります",title:"Опыт: доводилось",ex:"Прошедшее た + ことがあります — «есть опыт, когда-то делал».",s:[["すしをたべたことがありますか。","Ты когда-нибудь ел суши?"],["にほんへいったことがありません。","Я ни разу не был в Японии."]]},
+ {id:"g23",lvl:"N4",pat:"〜と思います",title:"Я думаю, что",ex:"Простая форма + と思います. Очень частая конструкция для мнений; в школе на экзамене говорения нужна постоянно.",s:[["あしたはあめがふるとおもいます。","Думаю, завтра будет дождь."],["にほんごはおもしろいとおもいます。","Думаю, японский интересный."]]},
+ {id:"g24",lvl:"N4",pat:"〜ことができます",title:"Могу, умею",ex:"Словарная форма + ことができます. Позже выучите потенциальную форму (食べられる, 話せる).",s:[["にほんごをはなすことができます。","Умею говорить по-японски."],["ここでおよぐことができません。","Здесь нельзя (невозможно) плавать."]]},
+];
+
+// Phases of the 18-month plan
+const PHASES = [
+ {id:"p0",n:"〇",title:"Кана и звуки",span:"Недели 1–2",weeks:2,
+  goal:"Читать хирагану и катакану без подсказок, поставить произношение, настроить систему.",
+  targets:{kana:104,words:0,kanji:0,hours:30},
+  items:["Хирагана за 5–7 дней через мнемоники (тренажёр «Кана» + Tofugu)","Катакана за 5–7 дней","Длина гласных, удвоенные согласные っ, ん","Каждый день слушать японскую речь по 15–20 минут, даже без понимания","Установить Anki на телефон (или пользоваться карточками на этом сайте)"],
+  milestones:["Прочитал(а) все 46 знаков хираганы без ошибок","Прочитал(а) всю катакану без ошибок","Записал(а) себя, читающего вслух 5 слов"]},
+ {id:"p1",n:"一",title:"Фундамент N5",span:"Месяцы 1–4",weeks:17,
+  goal:"Вся грамматика N5, 800 слов, 100 кандзи. Понимать простые видео для начинающих.",
+  targets:{kana:104,words:800,kanji:100,hours:300},
+  items:["Учебник: Genki I (или Minna no Nihongo I с русским переводом) — 2 урока в 3 недели","Карточки: 10–15 новых слов в день, все повторения каждый день","Кандзи: 5–7 в день через ключи и мнемоники","Понятный ввод: Comprehensible Japanese (уровень «Complete beginner»), Nihongo con Teppei for Beginners","Шэдоуинг 10 минут: повторять за диктором фразы из урока"],
+  milestones:["Закончил(а) Genki I","800 слов в карточках","100 кандзи","Смотрю 30 минут видео для начинающих и понимаю суть"]},
+ {id:"p2",n:"二",title:"N4 и первые разговоры",span:"Месяцы 5–8",weeks:17,
+  goal:"Грамматика N4, 1500 слов, 300 кандзи. Сдать JLPT N4 в июле 2027. Регулярный разговор с преподавателем.",
+  targets:{kana:104,words:1500,kanji:300,hours:600},
+  items:["Учебник: Genki II + Bunpro для повторения грамматики","Разговор: italki — 2 урока в неделю по 30–45 минут","Чтение: градуированные ридеры (Tadoku, уровни 0–2), Satori Reader","Карточки из «майнинга»: незнакомые слова из того, что смотрите и читаете","Пробные тесты JLPT N4 в последний месяц"],
+  milestones:["Регистрация на JLPT N4 (весна 2027)","Закончил(а) Genki II","Сдал(а) JLPT N4 (июль 2027)","Провёл(а) 20 разговорных уроков"]},
+ {id:"p3",n:"三",title:"Порог N3 и документы",span:"Месяцы 9–12",weeks:17,
+  goal:"Грамматика N3, 3000 слов, 650 кандзи. Сдать N3 в декабре 2027. Подать документы в языковую школу на апрельский набор.",
+  targets:{kana:104,words:3000,kanji:650,hours:900},
+  items:["Учебник: Tobira или Quartet I + серия 新完全マスター N3","Чтение каждый день: NHK News Web Easy, манга (Yotsuba&!), Satori Reader","Аниме и сериалы с японскими субтитрами, расширение Yomitan/Language Reactor","italki 2–3 раза в неделю, начать вести дневник на японском с исправлениями","Документы в школу: выбрать 3–5 школ, собрать пакет, подать до дедлайна"],
+  milestones:["Выбрал(а) языковые школы","Подал(а) документы на апрельский набор","Регистрация на JLPT N3","Сдал(а) JLPT N3 (декабрь 2027)"]},
+ {id:"p4",n:"四",title:"Погружение перед переездом",span:"Месяцы 13–17",weeks:21,
+  goal:"4500 слов, 1000 кандзи. Свободный бытовой разговор, понимание живой речи. Виза и переезд.",
+  targets:{kana:104,words:4500,kanji:1000,hours:1250},
+  items:["Начать подготовку к N2: 新完全マスター N2, Shin Kanzen grammar","Больше «нативного» контента: YouTube, подкасты, дорамы без русских субтитров","Говорение каждый день: italki, языковой обмен (HelloTalk), монологи на диктофон","Базовая лексика EJU «Японский как иностранный»: чтение научно-популярных текстов","Бытовой японский: жильё, банк, телефон, ратуша, больница"],
+  milestones:["Получен COE (сертификат соответствия)","Получена студенческая виза","Свободно говорю 20 минут о себе и своих планах"]},
+ {id:"p5",n:"五",title:"Япония: школа → университет",span:"С апреля 2028",weeks:52,
+  goal:"Языковая школа. Цель: JLPT N2 и EJU, поступление в университет весной 2029.",
+  targets:{kana:104,words:7000,kanji:1500,hours:2500},
+  items:["Учёба в языковой школе 20 часов в неделю","EJU в июне и ноябре 2028 (японский + предметы по направлению)","JLPT N2 в июле 2028, N1 по желанию в декабре","Подача в университеты осенью 2028","Общение на японском вне школы: подработка (до 28 ч/нед), кружки"],
+  milestones:["Сдал(а) JLPT N2","Сдал(а) EJU","Поступил(а) в университет"]},
+];
+
+// Daily plan per phase: [id, title, minutes, detail, linkView]
+const DAILY = {
+ p0:[["t-kana","Кана: новые знаки",30,"5–10 новых знаков с мнемоникой, прописать каждый 5 раз","kana"],["t-srs","Повторение карточек",20,"Колоды «Хирагана» и «Катакана»","srs"],["t-quiz","Тренажёр чтения",15,"Режим «Ввод ромадзи», цель — 90% правильно","kana"],["t-listen","Слушать японскую речь",25,"Comprehensible Japanese, Complete Beginner — просто смотреть и угадывать","resources"],["t-sound","Произношение",10,"Повторять вслух за озвучкой: длинные гласные, っ, ん","kana"]],
+ p1:[["t-srs","Повторение карточек",35,"Сначала все повторения, потом 10–15 новых слов и 5 кандзи","srs"],["t-text","Учебник и грамматика",40,"Один раздел Genki/Minna + пункт грамматики на сайте","grammar"],["t-input","Понятный ввод",45,"Видео для начинающих или подкаст Teppei","resources"],["t-shadow","Шэдоуинг",15,"Повторять за диктором диалог урока 3–5 раз","grammar"],["t-ai","Практика с ИИ-сэнсэем",15,"Составить 5 предложений на новую грамматику и получить исправления","ai"]],
+ p2:[["t-srs","Повторение карточек",35,"Повторения + новые слова из «майнинга»","srs"],["t-text","Учебник и грамматика N4",35,"Genki II или Bunpro","grammar"],["t-input","Понятный ввод",50,"Видео, подкасты, ридеры Tadoku","resources"],["t-read","Чтение",20,"Satori Reader или градуированный ридер","resources"],["t-speak","Говорение",20,"italki (2 р/нед) или монолог на диктофон, разбор с ИИ-сэнсэем","ai"]],
+ p3:[["t-srs","Повторение карточек",30,"Повторения + майнинг","srs"],["t-text","Учебник N3",35,"Tobira / 新完全マスター","grammar"],["t-input","Нативный контент",50,"Аниме, YouTube, дорамы с японскими субтитрами","resources"],["t-read","Чтение",25,"NHK Easy + манга","resources"],["t-write","Дневник на японском",15,"3–5 предложений, проверка ИИ-сэнсэем","ai"]],
+ p4:[["t-srs","Повторение карточек",25,"Повторения + майнинг","srs"],["t-text","Подготовка N2 / EJU",35,"新完全マスター N2, тексты EJU","grammar"],["t-input","Нативный контент",60,"Подкасты, дорамы без субтитров","resources"],["t-speak","Говорение",30,"Разговор с преподавателем или языковой обмен","ai"]],
+ p5:[["t-srs","Повторение карточек",20,"Майнинг из учёбы и жизни","srs"],["t-text","Языковая школа",180,"Занятия + домашние задания","program"],["t-input","Японский вне класса",60,"Общение, подработка, контент","resources"]],
+};
+
+const RESOURCES = [
+ {cat:"Кана и старт",items:[
+  ["Tofugu: Learn Hiragana","https://www.tofugu.com/japanese/learn-hiragana/","Мнемоники на каждый знак хираганы, есть такой же гайд по катакане."],
+  ["Anki","https://apps.ankiweb.net/","Главная программа интервального повторения. AnkiDroid на Android бесплатно."]]},
+ {cat:"Учебники и грамматика",items:[
+  ["Genki (Japan Times)","https://genki3.japantimes.co.jp/en/","Основной учебник уровней N5–N4, к нему есть аудио и приложение."],
+  ["Tae Kim's Guide","https://guidetojapanese.org/learn/","Бесплатный учебник грамматики с логичной подачей."],
+  ["Bunpro","https://bunpro.jp/","Грамматика с интервальным повторением, разбита по уровням JLPT."],
+  ["Imabi","https://www.imabi.org/","Глубокий справочник по грамматике, на потом."]]},
+ {cat:"Кандзи и слова",items:[
+  ["WaniKani","https://www.wanikani.com/","Кандзи через ключи и мнемоники. Первые 3 уровня бесплатно."],
+  ["Jisho","https://jisho.org/","Лучший онлайн-словарь японского (на английском)."],
+  ["Renshuu","https://www.renshuu.org/","Слова, кандзи и грамматика в форме игры."],
+  ["Yomitan","https://yomitan.wiki/","Расширение браузера: наводишь на слово — видишь перевод, одно нажатие отправляет его в Anki."]]},
+ {cat:"Понятный ввод (самое важное)",items:[
+  ["Comprehensible Japanese","https://cijapanese.com/","Видео для полных новичков: учитель рисует и объясняет только на японском."],
+  ["Nihongo con Teppei (поиск)","https://www.youtube.com/results?search_query=nihongo+con+teppei+for+beginners","Короткие подкасты на простом японском."],
+  ["Satori Reader","https://www.satorireader.com/","Истории с разбором каждого предложения и озвучкой."],
+  ["Tadoku: ридеры","https://tadoku.org/japanese/en/","Бесплатные градуированные книжки уровней 0–4."],
+  ["NHK News Web Easy","https://www3.nhk.or.jp/news/easy/","Новости на упрощённом японском с фуриганой."],
+  ["Language Reactor","https://www.languagereactor.com/","Двойные субтитры и словарь на YouTube и Netflix."]]},
+ {cat:"Разговор",items:[
+  ["italki","https://www.italki.com/","Уроки с преподавателями и разговорная практика, в том числе на русском."],
+  ["HelloTalk","https://www.hellotalk.com/","Языковой обмен с японцами."]]},
+ {cat:"Экзамены и переезд",items:[
+  ["JLPT (официальный сайт)","https://www.jlpt.jp/e/","Даты, образцы заданий, регистрация через местный центр."],
+  ["EJU (JASSO)","https://www.jasso.go.jp/en/eju/","Экзамен для поступления в японские университеты."],
+  ["Study in Japan","https://www.studyinjapan.go.jp/en/","Официальный портал: языковые школы, университеты, визы."],
+  ["Список аккредитованных школ","https://www.nisshinkyo.org/","Ассоциация языковых школ (日本語教育振興協会): поиск школ."]]},
+];
+// ===== APP =====
+const $ = (s, el = document) => el.querySelector(s);
+const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const pad = n => String(n).padStart(2, "0");
+const keyOf = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+const dayNum = d => Math.floor((d.getTime() - d.getTimezoneOffset() * 60000) / 86400000);
+const parseKey = k => { const [y, m, d] = k.split("-").map(Number); return new Date(y, m - 1, d); };
+const todayKey = () => keyOf(new Date());
+const today = () => dayNum(new Date());
+const fmtDate = d => d.toLocaleDateString("ru-RU", { day: "numeric", month: "long", year: "numeric" });
+const plural = (n, a, b, c) => { const m10 = n % 10, m100 = n % 100; return m10 === 1 && m100 !== 11 ? a : m10 >= 2 && m10 <= 4 && (m100 < 10 || m100 >= 20) ? b : c; };
+const SPK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4V5z" fill="currentColor"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></svg>';
+const sayBtn = (t, label = "Озвучить") => `<button class="say" data-say="${esc(t)}" aria-label="${label}" title="${label}">${SPK}</button>`;
+
+// ---------- state ----------
+const LS = "nihongo-path-v1";
+function defaultState() {
+  return { v: 1, start: todayKey(), move: "2028-04-01", newPerDay: 15, extraWords: 0, extraKanji: 0, phaseOverride: "",
+    decks: { hi: true, ka: false, vo: false, kj: false }, srs: {}, days: {}, newCount: {}, grammar: {}, milestones: {}, kanaBest: 0, updatedAt: 0 };
+}
+let S = defaultState();
+function merge(x) { const d = defaultState(); return Object.assign(d, x || {}, { decks: Object.assign(d.decks, (x || {}).decks || {}) }); }
+try { const raw = localStorage.getItem(LS); if (raw) S = merge(JSON.parse(raw)); } catch (e) {}
+function saveLocal() { try { localStorage.setItem(LS, JSON.stringify(S)); } catch (e) {} }
+
+let dbDoc = null, pushTimer = null, pushing = false, pushAgain = false;
+function setSync(kind, text) { $("#syncDot").className = "dot " + (kind || ""); $("#syncText").textContent = text; }
+function save() { S.updatedAt = Date.now(); saveLocal(); if (dbDoc) { clearTimeout(pushTimer); pushTimer = setTimeout(push, 1200); } }
+async function push() {
+  if (!dbDoc) return;
+  if (pushing) { pushAgain = true; return; }
+  pushing = true;
+  try { await dbDoc.set(JSON.parse(JSON.stringify(S))); setSync("ok", "Синхронизировано с аккаунтом"); }
+  catch (e) { setSync("err", "Не удалось сохранить в аккаунт, данные есть в браузере"); }
+  pushing = false;
+  if (pushAgain) { pushAgain = false; push(); }
+}
+async function initCloud() {
+  try {
+    if (!window.claude?.use) return;
+    const [db, user] = await Promise.all([claude.use("db"), claude.use("user")]);
+    if (!db || !user) return;
+    const id = await user.id();
+    if (!id) return;
+    const ref = db.doc("data/users/" + id + "/app");
+    const timer = new Promise((_, rej) => setTimeout(() => rej(new Error("timeout")), 10000));
+    const snap = await Promise.race([ref.get(), timer]);
+    dbDoc = ref;
+    if (snap.exists) {
+      const remote = snap.data() || {};
+      if ((remote.updatedAt || 0) > (S.updatedAt || 0)) { S = merge(remote); saveLocal(); render(); }
+      else if ((S.updatedAt || 0) > (remote.updatedAt || 0)) push();
+    } else if (S.updatedAt) push();
+    setSync("ok", "Синхронизировано с аккаунтом");
+  } catch (e) { setSync("err", "Аккаунт недоступен, прогресс хранится в браузере"); }
+}
+
+// ---------- speech ----------
+let ttsP = null, ttsOff = false;
+async function say(text) {
+  if (!ttsOff && window.claude?.use) {
+    try {
+      const t = await (ttsP ||= claude.use("tts"));
+      if (t) { await t.speak(text, { language: "ja" }); return; }
+    } catch (e) { if (e && e.code === "not_granted") ttsOff = true; if (e && (e.code === "viewer_stopped" || e.code === "stopped")) return; }
+  }
+  try {
+    const u = new SpeechSynthesisUtterance(text); u.lang = "ja-JP"; u.rate = 0.9;
+    const v = speechSynthesis.getVoices().find(v => v.lang && v.lang.startsWith("ja")); if (v) u.voice = v;
+    speechSynthesis.cancel(); speechSynthesis.speak(u);
+  } catch (e) { toast("Озвучка недоступна в этом браузере"); }
+}
+document.addEventListener("click", e => { const b = e.target.closest("[data-say]"); if (b) { e.preventDefault(); say(b.dataset.say); } });
+
+function toast(t) { const el = $("#toast"); el.textContent = t; el.hidden = false; clearTimeout(toast._t); toast._t = setTimeout(() => el.hidden = true, 2200); }
+
+// ---------- derived ----------
+const DECKS = {
+  hi: { name: "Хирагана", ids: KANA.map((_, i) => "hi" + i) },
+  ka: { name: "Катакана", ids: KANA.map((_, i) => "ka" + i) },
+  vo: { name: "Слова N5", ids: VOCAB_RAW.map(v => v.id) },
+  kj: { name: "Кандзи N5", ids: KANJI_RAW.map(k => k.id) },
+};
+function card(id) {
+  const p = id.slice(0, 2), i = +id.slice(2);
+  if (p === "hi") return { front: KANA[i].h, cls: "", reading: KANA[i].r, meaning: "", speak: KANA[i].h, answer: KANA[i].r };
+  if (p === "ka") return { front: KANA[i].k, cls: "", reading: KANA[i].r, meaning: "", speak: KANA[i].k, answer: KANA[i].r };
+  if (p === "vo") { const v = VOCAB_RAW[i]; return { front: v.w, cls: "", reading: v.w === v.r ? "" : v.r, meaning: v.m, speak: v.r, tag: v.t }; }
+  const k = KANJI_RAW[i]; return { front: k.c, cls: "kanji", reading: `音 ${k.on}　訓 ${k.kun}`, meaning: k.m, speak: k.c };
+}
+const learned = prefix => Object.entries(S.srs).filter(([k, v]) => k.startsWith(prefix) && v[3] > 0).length;
+function dayMinutes(k) {
+  const d = S.days[k]; if (!d) return 0;
+  const all = Object.values(DAILY).flat();
+  const m = (d.done || []).reduce((s, id) => { const t = all.find(x => x[0] === id); return s + (t ? t[2] : 0); }, 0);
+  return m + (d.extra || 0);
+}
+const totalHours = () => Object.keys(S.days).reduce((s, k) => s + dayMinutes(k), 0) / 60;
+function streak() {
+  let n = 0; const d = new Date();
+  const active = k => dayMinutes(k) > 0 || (S.days[k]?.rev || 0) > 0;
+  if (!active(keyOf(d))) d.setDate(d.getDate() - 1);
+  while (active(keyOf(d))) { n++; d.setDate(d.getDate() - 1); }
+  return n;
+}
+function phaseIndex() {
+  if (S.phaseOverride) return PHASES.findIndex(p => p.id === S.phaseOverride);
+  const weeks = (today() - dayNum(parseKey(S.start))) / 7;
+  let acc = 0;
+  for (let i = 0; i < PHASES.length; i++) { acc += PHASES[i].weeks; if (weeks < acc) return i; }
+  return PHASES.length - 1;
+}
+function phaseStart(i) { const d = parseKey(S.start); let w = 0; for (let j = 0; j < i; j++) w += PHASES[j].weeks; d.setDate(d.getDate() + w * 7); return d; }
+const dayRec = k => (S.days[k] ||= { done: [], extra: 0, rev: 0 });
+
+// ---------- SRS ----------
+function dueIds(decks) {
+  const t = today(), due = [], fresh = [];
+  decks.forEach(dk => DECKS[dk].ids.forEach(id => { const s = S.srs[id]; if (!s) fresh.push(id); else if (s[0] <= t) due.push(id); }));
+  return { due, fresh };
+}
+function grade(id, g) {
+  const t = today(); let [due, ivl, ease, reps, lapses] = S.srs[id] || [t, 0, 250, 0, 0];
+  if (g === 0) { reps = 0; lapses++; ivl = 0; ease = Math.max(130, ease - 20); due = t; }
+  else {
+    if (g === 1) { ivl = reps === 0 ? 1 : Math.max(ivl + 1, Math.round(ivl * 1.2)); ease = Math.max(130, ease - 15); }
+    if (g === 2) { ivl = reps === 0 ? 1 : reps === 1 ? 3 : Math.max(ivl + 1, Math.round(ivl * ease / 100)); }
+    if (g === 3) { ivl = reps === 0 ? 4 : Math.max(ivl + 2, Math.round(ivl * ease / 100 * 1.3)); ease += 15; }
+    reps++; due = t + ivl;
+  }
+  S.srs[id] = [due, ivl, ease, reps, lapses];
+}
+const nextIvlLabel = (id, g) => {
+  const s = S.srs[id] || [0, 0, 250, 0, 0]; const [, ivl, ease, reps] = s;
+  if (g === 0) return "сейчас";
+  let n = g === 1 ? (reps === 0 ? 1 : Math.max(ivl + 1, Math.round(ivl * 1.2))) : g === 2 ? (reps === 0 ? 1 : reps === 1 ? 3 : Math.max(ivl + 1, Math.round(ivl * ease / 100))) : (reps === 0 ? 4 : Math.max(ivl + 2, Math.round(ivl * ease / 100 * 1.3)));
+  return n + " " + plural(n, "день", "дня", "дней");
+};
+
+// ---------- router ----------
+const NAV = [["today", "今", "Сегодня"], ["program", "道", "План"], ["kana", "あ", "Кана"], ["srs", "暗", "Карточки"], ["grammar", "文", "Грамматика"], ["ai", "師", "Сэнсэй"], ["resources", "本", "Ресурсы"], ["method", "法", "Метод"]];
+$("#nav").innerHTML = NAV.map(([id, g, t]) => `<a href="#${id}" data-v="${id}"><span class="g">${g}</span>${t}</a>`).join("");
+const VIEWS = {};
+function current() { const h = location.hash.slice(1); return VIEWS[h] ? h : "today"; }
+function render() {
+  const v = current();
+  $$("#nav a").forEach(a => a.classList.toggle("on", a.dataset.v === v));
+  VIEWS[v]();
+}
+window.addEventListener("hashchange", () => { session = null; render(); window.scrollTo(0, 0); });
+
+// ---------- TODAY ----------
+VIEWS.today = () => {
+  const pi = phaseIndex(), P = PHASES[pi], k = todayKey(), rec = S.days[k] || { done: [] };
+  const tasks = DAILY[P.id];
+  const goal = tasks.reduce((s, t) => s + t[2], 0), mins = dayMinutes(k);
+  const dayN = today() - dayNum(parseKey(S.start)) + 1;
+  const toMove = dayNum(parseKey(S.move)) - today();
+  const { due, fresh } = dueIds(Object.keys(S.decks).filter(d => S.decks[d]));
+  const newLeft = Math.max(0, S.newPerDay - (S.newCount[k] || 0));
+  const kanaL = Math.max(learned("hi"), learned("ka"));
+  const words = learned("vo") + (+S.extraWords || 0), kanji = learned("kj") + (+S.extraKanji || 0), hrs = totalHours();
+  const T = P.targets;
+  const prog = (label, val, tgt, unit) => `<div><div class="row" style="justify-content:space-between"><span class="small" style="font-weight:700">${label}</span><span class="small muted" style="font-variant-numeric:tabular-nums">${Math.round(val)} / ${tgt} ${unit}</span></div><div class="bar" style="margin-top:6px"><i style="width:${tgt ? Math.min(100, val / tgt * 100) : 100}%"></i></div></div>`;
+  const jlpt = [["2027-07-04", "JLPT N4"], ["2027-12-05", "JLPT N3"], ["2028-07-02", "JLPT N2"]].map(([d, n]) => [dayNum(parseKey(d)) - today(), n, d]).find(x => x[0] >= 0);
+  $("#view").innerHTML = `
+  <div class="head"><div><div class="eyebrow">День ${Math.max(1, dayN)} · ${fmtDate(new Date())}</div><h1>今日も頑張ろう <span class="muted" style="font-weight:600;font-size:.6em">«и сегодня постараемся»</span></h1></div>
+   <span class="chip shu">Этап ${P.n} · ${esc(P.title)}</span></div>
+  <div class="grid g4">
+   <div class="card stat"><b>${streak()}</b><span>${plural(streak(), "день", "дня", "дней")} подряд</span></div>
+   <div class="card stat"><b>${mins}<small class="muted" style="font-size:.5em"> / ${goal} мин</small></b><span>сегодня</span><div class="bar" style="margin-top:8px"><i style="width:${Math.min(100, mins / goal * 100)}%"></i></div></div>
+   <div class="card stat"><b>${due.length}<small class="muted" style="font-size:.5em"> + ${Math.min(newLeft, fresh.length)} нов.</small></b><span>карточек к повторению</span></div>
+   <div class="card stat"><b>${toMove > 0 ? toMove : 0}</b><span>${plural(Math.max(0, toMove), "день", "дня", "дней")} до переезда</span></div>
+  </div>
+  <div class="grid g2" style="align-items:start">
+   <div class="card"><div class="row" style="justify-content:space-between;margin-bottom:6px"><h2>План на сегодня</h2><span class="small muted">≈ ${Math.round(goal / 6) / 10} ч</span></div>
+    ${tasks.map(t => { const on = (rec.done || []).includes(t[0]); return `<div class="task ${on ? "done" : ""}"><button class="tick ${on ? "on" : ""}" data-task="${t[0]}" aria-label="Отметить: ${esc(t[1])}" aria-pressed="${on}">${on ? "✓" : ""}</button><div><div class="tt">${esc(t[1])}</div><div class="td">${esc(t[3])} · <a href="#${t[4]}">открыть</a></div></div><span class="tmin">${t[2]} мин</span></div>`; }).join("")}
+    <div class="row" style="margin-top:12px;border-top:1px solid var(--line);padding-top:12px"><span class="small muted">Занимались сверх плана?</span><button class="btn sm" data-extra="15">+15 мин</button><button class="btn sm" data-extra="30">+30 мин</button><button class="btn sm" data-extra="-15">−15</button></div>
+   </div>
+   <div class="grid">
+    <div class="card"><h2 style="margin-bottom:12px">Цели этапа</h2><div class="grid" style="gap:12px">
+     ${prog("Кана", kanaL, 104, "знаков")}${T.words ? prog("Слова", words, T.words, "") : ""}${T.kanji ? prog("Кандзи", kanji, T.kanji, "") : ""}${prog("Часы всего", hrs, T.hours, "ч")}
+    </div><p class="small muted" style="margin-top:10px">${esc(P.goal)}</p></div>
+    <div class="card"><div class="row" style="justify-content:space-between"><h2>Последние 14 дней</h2><span class="small muted">минуты в день</span></div>${chart14(goal)}</div>
+    ${jlpt ? `<div class="card row" style="justify-content:space-between"><div><div class="eyebrow">Ближайший экзамен</div><b style="font-size:1.1rem">${jlpt[1]} · ${fmtDate(parseKey(jlpt[2]))}</b></div><span class="chip ai">через ${jlpt[0]} ${plural(jlpt[0], "день", "дня", "дней")}</span></div>` : ""}
+   </div>
+  </div>`;
+  $$("[data-task]").forEach(b => b.onclick = () => { const r = dayRec(k); const id = b.dataset.task; r.done = r.done.includes(id) ? r.done.filter(x => x !== id) : [...r.done, id]; save(); render(); });
+  $$("[data-extra]").forEach(b => b.onclick = () => { const r = dayRec(k); r.extra = Math.max(0, (r.extra || 0) + +b.dataset.extra); save(); render(); });
+};
+function chart14(goal) {
+  const W = 420, H = 140, L = 30, B = 22, days = [];
+  for (let i = 13; i >= 0; i--) { const d = new Date(); d.setDate(d.getDate() - i); days.push([d, dayMinutes(keyOf(d))]); }
+  const max = Math.max(goal, ...days.map(d => d[1]), 30), top = Math.ceil(max / 60) * 60;
+  const y = v => H - B - (v / top) * (H - B - 10), bw = (W - L - 6) / 14;
+  const ticks = [0, top / 2, top];
+  return `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Минуты занятий за 14 дней" style="margin-top:8px">
+   ${ticks.map(t => `<line x1="${L}" x2="${W}" y1="${y(t)}" y2="${y(t)}" stroke="var(--line)"/><text x="${L - 6}" y="${y(t) + 4}" font-size="10" text-anchor="end">${t}</text>`).join("")}
+   <line x1="${L}" x2="${W}" y1="${y(goal)}" y2="${y(goal)}" stroke="var(--shu)" stroke-dasharray="4 4"/>
+   ${days.map(([d, m], i) => `<rect x="${L + 3 + i * bw}" y="${y(m)}" width="${bw - 5}" height="${Math.max(0, H - B - y(m))}" rx="3" fill="${i === 13 ? "var(--ai)" : "var(--ai)"}" opacity="${i === 13 ? 1 : .55}"><title>${d.toLocaleDateString("ru-RU")}: ${m} мин</title></rect>${i % 2 === 1 ? `<text x="${L + 3 + i * bw + (bw - 5) / 2}" y="${H - 6}" font-size="10" text-anchor="middle">${d.getDate()}</text>` : ""}`).join("")}
+  </svg><div class="small muted"><span style="color:var(--shu)">- - -</span> дневная цель этапа</div>`;
+}
+
+// ---------- PROGRAM ----------
+VIEWS.program = () => {
+  const pi = phaseIndex();
+  $("#view").innerHTML = `
+  <div class="head"><div><div class="eyebrow">Программа на 18 месяцев</div><h1>От нуля до японского университета</h1>
+   <p class="sub" style="margin-top:8px">Маршрут под ваш путь: языковая школа с апреля 2028, затем университет. Для визы в школу нужен минимум N5–N4 или 150 часов занятий; мы целимся выше: N3 к переезду, чтобы попасть в сильную группу и за год в Японии выйти на N2 и EJU.</p></div></div>
+  <div class="grid" style="gap:14px">
+  ${PHASES.map((p, i) => { const st = phaseStart(i), en = phaseStart(i + 1); en.setDate(en.getDate() - 1);
+    return `<div class="phase ${i === pi ? "cur" : ""}"><div class="num">${p.n}</div><div class="card">
+     <div class="row" style="justify-content:space-between"><div><div class="eyebrow">${esc(p.span)} · ${st.toLocaleDateString("ru-RU", { month: "short", year: "numeric" })} – ${i === PHASES.length - 1 ? "…" : en.toLocaleDateString("ru-RU", { month: "short", year: "numeric" })}</div><h2>${esc(p.title)}</h2></div>${i === pi ? '<span class="chip shu">Вы здесь</span>' : i < pi ? '<span class="chip ok">Пройдено</span>' : ""}</div>
+     <p style="margin-top:8px">${esc(p.goal)}</p>
+     <div class="grid g2" style="margin-top:12px;gap:18px">
+      <div><h3>Что делаем</h3><ul class="ul small">${p.items.map(x => `<li>${esc(x)}</li>`).join("")}</ul></div>
+      <div><h3>Контрольные точки</h3>${p.milestones.map((m, j) => { const id = p.id + "m" + j, on = !!S.milestones[id]; return `<div class="ms"><button class="tick ${on ? "on" : ""}" data-ms="${id}" aria-pressed="${on}" aria-label="${esc(m)}">${on ? "✓" : ""}</button><span class="small" style="${on ? "text-decoration:line-through;color:var(--ink-3)" : ""}">${esc(m)}</span></div>`; }).join("")}
+       <div class="row small muted" style="margin-top:8px;gap:14px"><span>Слова: <b>${p.targets.words}</b></span><span>Кандзи: <b>${p.targets.kanji}</b></span><span>Часы: <b>${p.targets.hours}</b></span></div></div>
+     </div></div></div>`; }).join("")}
+  </div>
+  ${settingsCard()}`;
+  $$("[data-ms]").forEach(b => b.onclick = () => { const id = b.dataset.ms; S.milestones[id] = !S.milestones[id]; save(); render(); });
+  bindSettings();
+};
+function settingsCard() {
+  return `<div class="card" id="settings"><h2>Настройки</h2>
+   <div class="grid g3" style="margin-top:12px">
+    <label class="small"><b>Дата старта</b><br><input type="date" id="setStart" value="${S.start}"></label>
+    <label class="small"><b>Дата переезда</b><br><input type="date" id="setMove" value="${S.move}"></label>
+    <label class="small"><b>Новых карточек в день</b><br><input type="number" id="setNew" min="0" max="60" value="${S.newPerDay}"></label>
+    <label class="small"><b>Этап</b><br><select id="setPhase"><option value="">Автоматически по дате</option>${PHASES.map(p => `<option value="${p.id}" ${S.phaseOverride === p.id ? "selected" : ""}>${p.n} ${esc(p.title)}</option>`).join("")}</select></label>
+    <label class="small"><b>Слов выучено в Anki</b><br><input type="number" id="setXW" min="0" value="${S.extraWords}"></label>
+    <label class="small"><b>Кандзи выучено вне сайта</b><br><input type="number" id="setXK" min="0" value="${S.extraKanji}"></label>
+   </div>
+   <div class="row" style="margin-top:16px">
+    <button class="btn" id="btnExport">Скачать резервную копию</button>
+    <label class="btn" for="impFile" style="cursor:pointer">Загрузить копию</label><input type="file" id="impFile" accept=".json,application/json" hidden>
+    <button class="btn" id="btnTheme">Тема: ${document.documentElement.dataset.theme === "dark" ? "тёмная" : document.documentElement.dataset.theme === "light" ? "светлая" : "как в системе"}</button>
+    <button class="btn" id="btnReset" style="color:var(--shu)">Сбросить прогресс</button>
+   </div>
+   <div id="resetConfirm" hidden class="row" style="margin-top:10px"><span class="small">Удалить весь прогресс без возможности восстановления?</span><button class="btn sm" id="resetYes" style="color:var(--shu)">Да, удалить</button><button class="btn sm" id="resetNo">Отмена</button></div>
+  </div>`;
+}
+function bindSettings() {
+  const on = (id, f) => { const el = $("#" + id); if (el) el.onchange = () => { f(el.value); save(); render(); }; };
+  on("setStart", v => v && (S.start = v)); on("setMove", v => v && (S.move = v));
+  on("setNew", v => S.newPerDay = Math.max(0, Math.min(60, +v || 0))); on("setPhase", v => S.phaseOverride = v);
+  on("setXW", v => S.extraWords = Math.max(0, +v || 0)); on("setXK", v => S.extraKanji = Math.max(0, +v || 0));
+  $("#btnExport").onclick = async () => {
+    const data = JSON.stringify(S, null, 1);
+    try { const dl = window.claude?.use ? await claude.use("downloads") : null; if (!dl) throw 0; await dl.save({ filename: "nihongo-progress-" + todayKey() + ".json", data }); toast("Копия сохранена"); }
+    catch (e) {
+      if (STANDALONE) { try { const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([data], { type: "application/json" })); a.download = "nihongo-progress-" + todayKey() + ".json"; document.body.appendChild(a); a.click(); a.remove(); toast("Копия сохранена"); return; } catch (_) {} }
+      try { await navigator.clipboard.writeText(data); toast("Скачивание недоступно, копия скопирована в буфер"); } catch (_) { toast("Не удалось сохранить копию"); } }
+  };
+  $("#impFile").onchange = e => { const f = e.target.files[0]; if (!f) return; const r = new FileReader(); r.onload = () => { try { const x = JSON.parse(r.result); if (!x || typeof x.srs !== "object") throw 0; S = merge(x); save(); render(); toast("Прогресс загружен"); } catch (_) { toast("Файл не похож на резервную копию этого сайта"); } }; r.readAsText(f); };
+  $("#btnTheme").onclick = () => { const r = document.documentElement, t = r.dataset.theme; const n = !t ? "dark" : t === "dark" ? "light" : ""; if (n) r.dataset.theme = n; else delete r.dataset.theme; try { localStorage.setItem(LS + "-theme", n); } catch (e) {} render(); };
+  $("#btnReset").onclick = () => $("#resetConfirm").hidden = false;
+  $("#resetNo").onclick = () => $("#resetConfirm").hidden = true;
+  $("#resetYes").onclick = () => { S = defaultState(); save(); render(); toast("Прогресс сброшен"); };
+}
+try { const t = localStorage.getItem(LS + "-theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+
+// ---------- KANA ----------
+let kanaScript = "h", quiz = null;
+VIEWS.kana = () => {
+  const s = kanaScript, pref = s === "h" ? "hi" : "ka";
+  const cell = (ch, r, i) => ch && ch !== "_" ? `<div class="kcell ${S.srs[pref + i]?.[3] > 0 ? "l" : ""}"><button data-say="${ch}" aria-label="${ch} — ${r}"><div class="k">${ch}</div><div class="r">${r}</div></button></div>` : `<div class="kcell empty"></div>`;
+  let idx = 0; const rows = KANA_ROWS.map(([g, rs, hs, ks]) => { const chars = [...(s === "h" ? hs : ks)]; return { g, cells: rs.split(" ").map((r, j) => { const ch = chars[j]; return r === "_" ? cell(null) : cell(ch, r, idx++); }) }; });
+  const yoon = YOON.map(([r, h, k]) => cell(s === "h" ? h : k, r, idx++));
+  $("#view").innerHTML = `
+  <div class="head"><div><div class="eyebrow">Этап 〇 · первые 2 недели</div><h1>Хирагана и катакана</h1><p class="sub" style="margin-top:6px">Нажмите на знак, чтобы услышать его. Зелёная рамка означает, что знак уже есть в ваших карточках. Учите по одной строке в день: смотрите мнемонику на Tofugu, прописывайте знак 5 раз, затем проверяйте себя в тренажёре.</p></div>
+   <div class="tabs" role="tablist"><button class="${s === "h" ? "on" : ""}" data-script="h">ひらがな</button><button class="${s === "k" ? "on" : ""}" data-script="k">カタカナ</button></div></div>
+  <div class="card" id="quizBox">${quizHTML()}</div>
+  <div class="grid g2" style="align-items:start">
+   <div class="card"><h2 style="margin-bottom:10px">Основные знаки</h2><div class="kgrid">${rows.filter(r => r.g === "base").map(r => r.cells.join("")).join("")}</div></div>
+   <div class="grid">
+    <div class="card"><h2 style="margin-bottom:4px">Звонкие: ゛ и ゜</h2><p class="small muted" style="margin-bottom:10px">Две чёрточки озвончают: か → が. Кружок даёт «п»: は → ぱ.</p><div class="kgrid">${rows.filter(r => r.g === "dak").map(r => r.cells.join("")).join("")}</div></div>
+    <div class="card"><h2 style="margin-bottom:4px">Слияния (ёон)</h2><p class="small muted" style="margin-bottom:10px">Маленькие ゃゅょ после знака на «и»: き + ゃ = きゃ (кя).</p><div class="kgrid" style="grid-template-columns:repeat(3,minmax(0,1fr))">${yoon.join("")}</div></div>
+   </div>
+  </div>
+  <div class="card"><h2>Три правила, которые стоит знать сразу</h2><div class="grid g3" style="margin-top:10px">
+   <div><h3 class="jp">がっこう ${sayBtn("がっこう")}</h3><p class="small">Маленькая っ удваивает следующий согласный: пауза перед ним. гаккоо — школа.</p></div>
+   <div><h3 class="jp">おかあさん ${sayBtn("おかあさん")}</h3><p class="small">Долгие гласные меняют смысл: おばさん (тётя) и おばあさん (бабушка). В катакане долготу показывает ー: コーヒー.</p></div>
+   <div><h3 class="jp">は・へ・を</h3><p class="small">Как частицы は читается «ва», へ — «э», を — «о». В обычных словах читаются как написано.</p></div>
+  </div></div>`;
+  $$("[data-script]").forEach(b => b.onclick = () => { kanaScript = b.dataset.script; quiz = null; render(); });
+  bindQuiz();
+};
+function quizHTML() {
+  if (!quiz) return `<div class="row" style="justify-content:space-between"><div><h2>Тренажёр чтения</h2><p class="small muted">Показываем знак, вы вводите ромадзи. 20 знаков за подход. Рекорд: ${S.kanaBest}%.</p></div>
+   <div class="row"><select id="qGroup" aria-label="Набор знаков"><option value="base">Основные</option><option value="base,dak">+ звонкие</option><option value="base,dak,yoon">Все</option></select><button class="btn pri" id="qStart">Начать</button></div></div>`;
+  if (quiz.i >= quiz.items.length) { const pct = Math.round(quiz.ok / quiz.items.length * 100);
+    return `<div class="fc" style="min-height:200px"><div class="eyebrow">Результат</div><div class="stat"><b style="font-size:3rem">${pct}%</b></div>${quiz.miss.length ? `<p>Повторите: <span class="jp" style="font-size:20px">${quiz.miss.map(esc).join("　")}</span></p>` : "<p>Без ошибок. Отлично!</p>"}<div class="row"><button class="btn pri" id="qAgain">Ещё раз</button><button class="btn" id="qClose">Закрыть</button></div></div>`; }
+  const it = quiz.items[quiz.i];
+  return `<div class="row" style="justify-content:space-between"><span class="small muted">${quiz.i + 1} / ${quiz.items.length}</span><span class="small muted">верно: ${quiz.ok}</span></div>
+   <div class="fc" style="min-height:220px"><div class="front">${it.ch}</div>
+   <form id="qForm" class="row" style="justify-content:center"><input class="quiz-in" id="qIn" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="ромадзи" aria-label="Чтение знака латиницей"><button class="btn pri">Проверить</button></form>
+   <div id="qFb" class="small" style="min-height:1.4em"></div></div>`;
+}
+function bindQuiz() {
+  const box = $("#quizBox"); if (!box) return;
+  const st = $("#qStart", box); if (st) st.onclick = () => { const gs = $("#qGroup").value.split(","); const pool = KANA.filter(k => gs.includes(k.g)); const items = []; const p = [...pool].sort(() => Math.random() - .5); for (let i = 0; i < 20; i++) { const k = p[i % p.length]; items.push({ ch: kanaScript === "h" ? k.h : k.k, r: k.r }); } quiz = { items, i: 0, ok: 0, miss: [], gs }; box.innerHTML = quizHTML(); bindQuiz(); $("#qIn")?.focus(); };
+  const f = $("#qForm", box); if (f) f.onsubmit = e => { e.preventDefault(); const it = quiz.items[quiz.i]; const v = $("#qIn").value.trim().toLowerCase(); if (!v) return;
+    const alt = { shi: ["si"], chi: ["ti"], tsu: ["tu"], fu: ["hu"], ji: ["zi", "di"], zu: ["du"], wo: ["o"], sha: ["sya"], shu: ["syu"], sho: ["syo"], cha: ["tya"], chu: ["tyu"], cho: ["tyo"], ja: ["jya", "zya"], ju: ["jyu", "zyu"], jo: ["jyo", "zyo"], n: ["nn"] };
+    const ok = v === it.r || (alt[it.r] || []).includes(v);
+    say(it.ch);
+    if (ok) quiz.ok++; else quiz.miss.push(it.ch);
+    $("#qFb").innerHTML = ok ? `<span style="color:var(--ok);font-weight:700">Верно: ${it.r}</span>` : `<span style="color:var(--shu);font-weight:700">Правильно: ${it.r}</span>`;
+    $("#qIn").disabled = true;
+    setTimeout(() => { quiz.i++; if (quiz.i >= quiz.items.length) { const pct = Math.round(quiz.ok / quiz.items.length * 100); if (pct > S.kanaBest) S.kanaBest = pct; dayRec(todayKey()).rev += quiz.items.length; save(); } box.innerHTML = quizHTML(); bindQuiz(); $("#qIn")?.focus(); }, ok ? 650 : 1500);
+  };
+  const ag = $("#qAgain", box); if (ag) ag.onclick = () => { quiz = null; box.innerHTML = quizHTML(); bindQuiz(); $("#qStart").click(); };
+  const cl = $("#qClose", box); if (cl) cl.onclick = () => { quiz = null; box.innerHTML = quizHTML(); bindQuiz(); };
+}
+
+// ---------- SRS ----------
+let session = null, srsTab = "study", dictQ = "";
+VIEWS.srs = () => {
+  if (session) return renderSession();
+  const active = Object.keys(S.decks).filter(d => S.decks[d]);
+  const { due, fresh } = dueIds(active);
+  const newLeft = Math.max(0, S.newPerDay - (S.newCount[todayKey()] || 0));
+  $("#view").innerHTML = `
+  <div class="head"><div><div class="eyebrow">Интервальное повторение</div><h1>Карточки</h1><p class="sub" style="margin-top:6px">Алгоритм как в Anki (SM-2): каждую карточку показываем прямо перед тем, как вы её забудете. Главное правило: делайте все повторения каждый день, новые карточки — только после них.</p></div>
+   <div class="tabs"><button class="${srsTab === "study" ? "on" : ""}" data-tab="study">Занятие</button><button class="${srsTab === "dict" ? "on" : ""}" data-tab="dict">Словарь</button></div></div>
+  ${srsTab === "study" ? `
+  <div class="grid g4">${Object.entries(DECKS).map(([id, d]) => { const l = learned(id), dd = dueIds([id]); return `<div class="card"><div class="row" style="justify-content:space-between"><h3>${d.name}</h3><button class="tick ${S.decks[id] ? "on" : ""}" data-deck="${id}" aria-pressed="${S.decks[id]}" aria-label="Включить колоду ${d.name}">${S.decks[id] ? "✓" : ""}</button></div><div class="small muted" style="margin:6px 0">${l} из ${d.ids.length} изучается · к повторению ${dd.due.length}</div><div class="bar"><i style="width:${l / d.ids.length * 100}%"></i></div></div>`; }).join("")}</div>
+  <div class="card row" style="justify-content:space-between"><div><h2>${due.length} к повторению · ${Math.min(newLeft, fresh.length)} новых</h2><p class="small muted">Включённые колоды: ${active.map(a => DECKS[a].name).join(", ") || "нет"}. Лимит новых в день: ${S.newPerDay} (меняется в «План → Настройки»).</p></div>
+   <button class="btn pri" id="go" ${due.length + Math.min(newLeft, fresh.length) ? "" : "disabled"}>Начать занятие</button></div>
+  <div class="card small"><b>Совет по порядку.</b> Неделя 1: хирагана. Неделя 2: катакана. Затем включайте «Слова N5» и «Кандзи N5». Когда освоите эти базовые колоды, переходите на Anki с готовой колодой (Kaishi 1.5k или Core 2k/6k) и добавляйте слова из того, что читаете и смотрите. Количество выученных там слов можно вписать в настройках, и оно будет учитываться в целях.</div>` : dictHTML()}`;
+  $$("[data-tab]").forEach(b => b.onclick = () => { srsTab = b.dataset.tab; render(); });
+  $$("[data-deck]").forEach(b => b.onclick = () => { S.decks[b.dataset.deck] = !S.decks[b.dataset.deck]; save(); render(); });
+  const go = $("#go"); if (go) go.onclick = () => { const q = [...due.sort(() => Math.random() - .5), ...fresh.slice(0, newLeft)]; session = { q, i: 0, shown: false, done: 0, total: q.length }; render(); };
+  const dq = $("#dictQ"); if (dq) { dq.oninput = () => { dictQ = dq.value; $("#dictBody").innerHTML = dictRows(); }; }
+};
+function dictRows() {
+  const q = dictQ.trim().toLowerCase();
+  const st = id => { const s = S.srs[id]; if (!s) return '<span class="chip">новое</span>'; if (s[1] >= 21) return '<span class="chip ok">выучено</span>'; return `<span class="chip ai">учу · ${s[1]} дн.</span>`; };
+  const v = VOCAB_RAW.filter(x => !q || (x.w + x.r + x.m + x.t).toLowerCase().includes(q)).map(x => `<tr><td class="j">${esc(x.w)}</td><td class="jp">${x.w === x.r ? "" : esc(x.r)}</td><td>${esc(x.m)}</td><td class="muted small">${esc(x.t)}</td><td>${st(x.id)}</td><td>${sayBtn(x.r)}</td></tr>`);
+  const k = KANJI_RAW.filter(x => !q || (x.c + x.on + x.kun + x.m).toLowerCase().includes(q)).map(x => `<tr><td class="j kj" style="font-size:22px">${x.c}</td><td class="jp small">${esc(x.on)} / ${esc(x.kun)}</td><td>${esc(x.m)}</td><td class="muted small">кандзи</td><td>${st(x.id)}</td><td>${sayBtn(x.c)}</td></tr>`);
+  return v.concat(k).join("") || `<tr><td colspan="6" class="muted">Ничего не нашлось</td></tr>`;
+}
+const dictHTML = () => `<div class="card"><div class="row" style="justify-content:space-between;margin-bottom:10px"><h2>${VOCAB_RAW.length} слов и ${KANJI_RAW.length} кандзи</h2><input type="text" id="dictQ" placeholder="Поиск: еда, たべる, 食…" value="${esc(dictQ)}" aria-label="Поиск по словарю"></div><div class="tbl-wrap"><table><thead><tr><th>Слово</th><th>Чтение</th><th>Перевод</th><th>Тема</th><th>Статус</th><th></th></tr></thead><tbody id="dictBody">${dictRows()}</tbody></table></div></div>`;
+function renderSession() {
+  const s = session;
+  if (s.i >= s.q.length) {
+    $("#view").innerHTML = `<div class="card fc"><div class="big-kanji">完</div><h1>Занятие окончено</h1><p class="muted">Пройдено карточек: ${s.done}. Возвращайтесь завтра — интервалы уже рассчитаны.</p><div class="row"><a class="btn pri" href="#today" id="endS">К плану на сегодня</a><button class="btn" id="moreS">Вернуться к колодам</button></div></div>`;
+    $("#moreS").onclick = () => { session = null; render(); };
+    return;
+  }
+  const id = s.q[s.i], c = card(id), isNew = !S.srs[id];
+  $("#view").innerHTML = `
+  <div class="row" style="justify-content:space-between"><button class="btn sm" id="quitS">← Выйти</button><span class="small muted">${s.i + 1} / ${s.q.length}${isNew ? ' · <span class="chip shu">новая</span>' : ""}</span></div>
+  <div class="bar"><i style="width:${s.i / s.q.length * 100}%"></i></div>
+  <div class="card fc"><div class="front ${c.cls}">${esc(c.front)}</div>
+   ${s.shown ? `<div class="back">${c.reading ? `<div class="rd">${esc(c.reading)}</div>` : ""}${c.meaning ? `<div class="mn">${esc(c.meaning)}</div>` : ""}${c.tag ? `<span class="chip">${esc(c.tag)}</span>` : ""}${sayBtn(c.speak)}</div>` : `<p class="muted small">Вспомните чтение${c.meaning !== "" || id.startsWith("vo") ? " и значение" : ""}, потом откройте ответ</p>`}
+  </div>
+  ${s.shown ? `<div class="grades"><button class="again" data-g="0">Снова<small>${nextIvlLabel(id, 0)}</small></button><button data-g="1">Трудно<small>${nextIvlLabel(id, 1)}</small></button><button class="good" data-g="2">Хорошо<small>${nextIvlLabel(id, 2)}</small></button><button data-g="3">Легко<small>${nextIvlLabel(id, 3)}</small></button></div><p class="small muted" style="text-align:center">Клавиши: 1–4</p>` : `<button class="btn pri" id="show" style="padding:14px">Показать ответ <span class="small" style="opacity:.75">(пробел)</span></button>`}`;
+  $("#quitS").onclick = () => { session = null; render(); };
+  const sh = $("#show"); if (sh) sh.onclick = () => { s.shown = true; render(); if (id.startsWith("hi") || id.startsWith("ka") || id.startsWith("vo")) say(c.speak); };
+  $$("[data-g]").forEach(b => b.onclick = () => doGrade(+b.dataset.g));
+}
+function doGrade(g) {
+  const s = session, id = s.q[s.i], k = todayKey();
+  if (!S.srs[id]) S.newCount[k] = (S.newCount[k] || 0) + 1;
+  grade(id, g); dayRec(k).rev++;
+  if (g === 0) s.q.splice(Math.min(s.q.length, s.i + 4), 0, id); else s.done++;
+  s.i++; s.shown = false; save(); render();
+}
+document.addEventListener("keydown", e => {
+  if (current() !== "srs" || !session || /INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName)) return;
+  if (!session.shown && (e.code === "Space" || e.key === "Enter")) { e.preventDefault(); $("#show")?.click(); }
+  else if (session.shown && ["1", "2", "3", "4"].includes(e.key)) doGrade(+e.key - 1);
+});
+
+// ---------- GRAMMAR ----------
+VIEWS.grammar = () => {
+  const n = GRAMMAR.filter(g => S.grammar[g.id]).length;
+  $("#view").innerHTML = `
+  <div class="head"><div><div class="eyebrow">N5 → N4 · ${n} из ${GRAMMAR.length} пройдено</div><h1>Грамматика</h1><p class="sub" style="margin-top:6px">Ядро грамматики N5 в порядке изучения. Каждый пункт: прочитайте объяснение, послушайте примеры, повторите их вслух 3 раза (шэдоуинг) и составьте свои предложения с ИИ-сэнсэем. Полный курс дадут Genki и Bunpro, здесь — карта и быстрая справка.</p></div>
+   <div style="min-width:200px"><div class="bar"><i style="width:${n / GRAMMAR.length * 100}%"></i></div></div></div>
+  <div class="grid" style="gap:10px">${GRAMMAR.map((g, i) => `<details class="card gp" ${i === GRAMMAR.findIndex(x => !S.grammar[x.id]) ? "open" : ""}>
+   <summary><div class="row" style="gap:12px"><span class="muted small" style="font-variant-numeric:tabular-nums;width:22px">${i + 1}</span><span class="pat">${esc(g.pat)}</span><b>${esc(g.title)}</b><span class="chip">${g.lvl}</span></div>${S.grammar[g.id] ? '<span class="chip ok">✓ пройдено</span>' : ""}</summary>
+   <p>${esc(g.ex)}</p>
+   <div style="margin-top:10px">${g.s.map(([j, t]) => `<div class="ex">${sayBtn(j)}<span class="j">${esc(j)}</span><span class="t">${esc(t)}</span></div>`).join("")}</div>
+   <div class="row" style="margin-top:12px"><button class="btn sm ${S.grammar[g.id] ? "" : "pri"}" data-gdone="${g.id}">${S.grammar[g.id] ? "Отметить как непройденное" : "Пройдено"}</button><button class="btn sm" data-gask="${g.id}">Потренироваться с сэнсэем</button></div>
+  </details>`).join("")}</div>`;
+  $$("[data-gdone]").forEach(b => b.onclick = () => { const id = b.dataset.gdone; S.grammar[id] = !S.grammar[id]; save(); render(); });
+  $$("[data-gask]").forEach(b => b.onclick = () => { const g = GRAMMAR.find(x => x.id === b.dataset.gask); aiMode = "quiz"; aiDraft = `Дай мне 5 упражнений на конструкцию ${g.pat} (${g.title}). Сначала короткое объяснение по-русски, потом задания по одному, проверяй мои ответы.`; location.hash = "ai"; });
+};
+
+// ---------- AI SENSEI ----------
+let aiMode = "explain", aiDraft = "", aiTurns = [], aiBusy = false, aiCtl = null;
+const AI_MODES = {
+  explain: ["Объясни", "Объясни разницу между は и が простыми словами"],
+  check: ["Проверь текст", "わたしはきのうともだちとえいがをみます。"],
+  talk: ["Разговор", "こんにちは！はじめまして。"],
+  quiz: ["Тест", "Сделай мне тест из 5 вопросов по словам на тему «еда»"],
+};
+function aiRules() {
+  const P = PHASES[phaseIndex()], gDone = GRAMMAR.filter(g => S.grammar[g.id]).map(g => g.pat).join(", ") || "пока ничего";
+  const words = learned("vo") + (+S.extraWords || 0);
+  const base = `Ты — терпеливый и точный преподаватель японского языка для русскоязычного ученика. Ученик начал с нуля, цель — языковая школа в Японии в апреле 2028 и затем университет (JLPT N2, EJU). Текущий этап: «${P.title}». Выучено слов: около ${words}. Пройденная грамматика: ${gDone}. Отвечай по-русски, японские примеры давай с чтением каной в скобках после кандзи, если ученик ещё на уровне N5. Будь кратким: не больше 200 слов, без длинных вступлений. Не используй markdown-заголовки и таблицы; списки допустимы.`;
+  const m = {
+    explain: "Режим «Объясни»: объясняй грамматику, слова и культуру просто, на 2–3 примерах с переводом. В конце предложи одно короткое упражнение.",
+    check: "Режим «Проверь текст»: ученик присылает японский текст. Покажи исправленный вариант, затем перечисли каждую ошибку: что было, как правильно, почему. Если ошибок нет, похвали и предложи более естественный вариант. Оцени текст по шкале JLPT (N5–N1).",
+    talk: "Режим «Разговор»: веди живой диалог НА ЯПОНСКОМ, используя только грамматику и слова уровня ученика. Формат каждого ответа: 1) твоя реплика на японском (1–3 коротких предложения, обязательно заканчивай вопросом к ученику); 2) строка «Чтение:» с той же репликой каной; 3) строка «Перевод:» по-русски; 4) если в последнем сообщении ученика были ошибки — строка «Исправление:» с кратким разбором.",
+    quiz: "Режим «Тест»: задавай вопросы по одному, жди ответа, проверяй, объясняй ошибку и давай следующий. Веди счёт. В конце подведи итог и скажи, что повторить.",
+  };
+  return base + "\n\n" + m[aiMode];
+}
+const STANDALONE = !window.claude?.use;
+const FREE_AI = [["Claude", "https://claude.ai/new"], ["ChatGPT", "https://chatgpt.com/"], ["Gemini", "https://gemini.google.com/app"], ["DeepSeek", "https://chat.deepseek.com/"]];
+function externalPrompt(first) {
+  return aiRules() + "\n\nЭто начало нашего занятия. Держи в памяти весь диалог и придерживайся режима и формата выше до конца разговора." + (first ? "\n\nМоё первое сообщение:\n" + first : "\n\nПоздоровайся одной фразой и жди моего сообщения.");
+}
+async function copyText(t, okMsg) {
+  try { await navigator.clipboard.writeText(t); toast(okMsg); return true; }
+  catch (e) { const box = $("#copyFallback"); if (box) { box.hidden = false; const ta = $("textarea", box); ta.value = t; ta.focus(); ta.select(); } toast("Скопируйте текст из поля ниже вручную"); return false; }
+}
+VIEWS.ai = () => {
+  $("#view").innerHTML = `
+  <div class="head"><div><div class="eyebrow">ИИ-преподаватель на базе Claude</div><h1>Сэнсэй 先生</h1><p class="sub" style="margin-top:6px">Объяснит непонятное, проверит ваши предложения, поговорит с вами на японском вашего уровня и устроит тест. Сэнсэй знает ваш этап и пройденную грамматику. Ошибки возможны: сверяйтесь с учебником, если ответ вызывает сомнения.</p></div></div>
+  ${STANDALONE ? `<div class="card" style="border-color:var(--ai)"><b>В этой версии сайта сэнсэй работает через любой бесплатный ИИ-чат.</b><p class="small" style="margin-top:4px">Выберите режим, по желанию напишите первое сообщение и нажмите «Скопировать для другого ИИ». Затем откройте чат и вставьте текст: ИИ получит ваш уровень, пройденную грамматику и правила занятия.</p></div>` : ""}
+  <div class="card">
+   <div class="row modes" style="margin-bottom:12px">${Object.entries(AI_MODES).map(([k, [n]]) => `<button class="${aiMode === k ? "on" : ""}" data-mode="${k}">${n}</button>`).join("")}${aiTurns.length ? '<button id="aiClear" style="margin-left:auto">Новый диалог</button>' : ""}</div>
+   <div class="chat" id="chat">${aiTurns.length ? aiTurns.map(t => msgHTML(t)).join("") : `<div class="muted small">Пример запроса для этого режима: <span class="jp">«${esc(AI_MODES[aiMode][1])}»</span></div>`}</div>
+   <form id="aiForm" style="margin-top:12px;display:flex;flex-direction:column;gap:8px">
+    <textarea id="aiIn" placeholder="${esc(AI_MODES[aiMode][1])}" aria-label="Сообщение сэнсэю">${esc(aiDraft)}</textarea>
+    <div class="row" style="justify-content:space-between"><span class="small muted" id="aiStatus"></span><div class="row"><button type="button" class="btn" id="aiStop" ${aiBusy ? "" : "hidden"}>Остановить</button><button type="button" class="btn ${STANDALONE ? "pri" : ""}" id="aiCopy">Скопировать для другого ИИ</button>${STANDALONE ? "" : `<button class="btn pri" id="aiSend" ${aiBusy ? "disabled" : ""}>Отправить</button>`}</div></div>
+   </form>
+  </div>
+  <div class="card"><div class="row" style="justify-content:space-between"><div><h2>Без подписки: любой бесплатный ИИ</h2><p class="small muted" style="margin-top:4px">Кнопка «Скопировать для другого ИИ» копирует инструкцию сэнсэя с вашим текущим этапом, грамматикой и выбранным режимом. Вставьте её в новый чат, и он будет вести урок так же.</p></div></div>
+   <div class="row" style="margin-top:10px">${FREE_AI.map(([n, u]) => `<a class="btn sm" href="${u}" target="_blank" rel="noopener">${n} ↗</a>`).join("")}</div>
+   <div id="copyFallback" hidden style="margin-top:10px"><label class="small muted" for="copyTa">Текст инструкции: выделите и скопируйте</label><textarea id="copyTa" readonly rows="6"></textarea></div>
+   <p class="small muted" style="margin-top:10px">Совет: когда этап сменится или вы пройдёте новую грамматику, начните новый чат и скопируйте инструкцию заново, чтобы ИИ знал ваш актуальный уровень.</p></div>`;
+  $("#aiCopy").onclick = () => copyText(externalPrompt($("#aiIn").value.trim()), "Инструкция скопирована. Вставьте её в чат с ИИ");
+  $$("[data-mode]").forEach(b => b.onclick = () => { if (aiMode !== b.dataset.mode) { aiMode = b.dataset.mode; aiTurns = []; } aiDraft = $("#aiIn").value; render(); });
+  const cl = $("#aiClear"); if (cl) cl.onclick = () => { aiTurns = []; render(); };
+  $("#aiIn").oninput = e => aiDraft = e.target.value;
+  $("#aiIn").onkeydown = e => { if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) { e.preventDefault(); $("#aiForm").requestSubmit(); } };
+  $("#aiForm").onsubmit = e => { e.preventDefault(); if (STANDALONE) $("#aiCopy").click(); else sendAI(); };
+  $("#aiStop").onclick = () => aiCtl?.abort();
+  const ch = $("#chat"); ch.scrollTop = ch.scrollHeight;
+};
+function msgHTML(t) {
+  if (t.role === "user") return `<div class="msg u jp">${esc(t.content)}</div>`;
+  const jp = (t.content.match(/[぀-ヿ一-鿿][぀-ヿ一-鿿、。！？ー\s]*/g) || []).join(" ").trim();
+  return `<div class="msg a"><span class="jpx">${esc(t.content)}</span>${jp && t.content ? `<div style="margin-top:6px">${sayBtn(jp.slice(0, 500), "Озвучить японский текст")}</div>` : ""}</div>`;
+}
+async function sendAI() {
+  const text = $("#aiIn").value.trim(); if (!text || aiBusy) return;
+  const sample = window.claude?.use ? await claude.use("sample") : null;
+  if (!sample) { $("#aiStatus").textContent = "Встроенный сэнсэй сейчас недоступен. Нажмите «Скопировать для другого ИИ» и продолжите в любом бесплатном чате."; return; }
+  aiTurns.push({ role: "user", content: text }); aiDraft = ""; aiBusy = true;
+  const bot = { role: "assistant", content: "" }; aiTurns.push(bot); render();
+  $("#aiStatus").textContent = "Сэнсэй думает…";
+  aiCtl = new AbortController();
+  const ch = $("#chat"), bubble = ch.lastElementChild;
+  try {
+    const turns = aiTurns.slice(0, -1).slice(-16);
+    const { text: out } = await sample([{ role: "user", content: aiRules() }, { role: "assistant", content: "Понял. Жду сообщения ученика." }, ...turns], {
+      cache: false, signal: aiCtl.signal, onText: ({ text }) => { bot.content = text; const sp = bubble.querySelector(".jpx"); if (sp) sp.textContent = text; ch.scrollTop = ch.scrollHeight; } });
+    bot.content = out;
+  } catch (e) {
+    if (!bot.content) aiTurns.pop();
+    const msg = e?.code === "not_granted" ? "Доступ к Claude не разрешён для этой страницы. Включите его в меню «Разрешения» или нажмите «Скопировать для другого ИИ»." : e?.code === "rate_limited" ? "Лимит запросов исчерпан. Подождите или нажмите «Скопировать для другого ИИ»." : e?.name === "AbortError" || e?.code === "aborted" ? "Остановлено." : "Не удалось получить ответ. Попробуйте ещё раз.";
+    aiBusy = false; render(); $("#aiStatus").textContent = msg; return;
+  }
+  aiBusy = false; render();
+}
+
+// ---------- RESOURCES ----------
+VIEWS.resources = () => {
+  $("#view").innerHTML = `
+  <div class="head"><div><div class="eyebrow">Проверенные инструменты</div><h1>Ресурсы</h1><p class="sub" style="margin-top:6px">Минимальный набор, которого хватит до N2. Не распыляйтесь: один учебник, одна система карточек, много понятного ввода.</p></div></div>
+  <div class="grid g2" style="align-items:start">${RESOURCES.map(c => `<div class="card"><h2 style="margin-bottom:6px">${esc(c.cat)}</h2>${c.items.map(([n, u, d]) => `<div class="res"><span class="muted small">↗</span><div><a href="${u}" target="_blank" rel="noopener">${esc(n)}</a><div class="small" style="color:var(--ink-2)">${esc(d)}</div></div></div>`).join("")}</div>`).join("")}</div>
+  <div class="card"><h2>Что купить или скачать в первую неделю</h2><ul class="ul"><li>Anki (бесплатно на компьютере и Android, платно на iPhone) или карточки на этом сайте</li><li>Учебник Genki I (3-е издание) с аудио, либо Minna no Nihongo I вместе с томом перевода на русский</li><li>Тетрадь для прописей кандзи и каны</li><li>Наушники для шэдоуинга: слушаете фразу и сразу повторяете вслед за диктором</li></ul></div>`;
+};
+
+// ---------- METHOD ----------
+VIEWS.method = () => {
+  const rows = [["N5", "325–500", "≈ 3–5 мес."], ["N4", "575–1000", "≈ 7–9 мес."], ["N3", "950–1600", "≈ 12–16 мес."], ["N2", "1600–2800", "≈ 20–30 мес."], ["N1", "3000–4800", "3+ года"]];
+  $("#view").innerHTML = `
+  <div class="head"><div><div class="eyebrow">Почему программа устроена именно так</div><h1>Метод</h1><p class="sub" style="margin-top:6px">Быстрее всего продвигаются ученики, которые совмещают четыре вещи: интервальное повторение слов, большой объём понятного на слух и в тексте материала, короткую структурированную грамматику и регулярную речь с обратной связью. Ни одна из этих частей не работает так же хорошо поодиночке.</p></div></div>
+  <div class="grid g2">
+   <div class="card"><span class="chip ai">30% времени</span><h2 style="margin-top:8px">Интервальное повторение</h2><p class="small" style="margin-top:6px">Эффект тестирования и распределённого повторения: вспоминать полезнее, чем перечитывать, а повторять с растущими интервалами лучше, чем зубрить за один раз. Это одни из самых надёжных результатов когнитивной психологии. Отсюда карточки и Anki каждый день.</p></div>
+   <div class="card"><span class="chip ai">35–45% времени</span><h2 style="margin-top:8px">Понятный ввод</h2><p class="small" style="margin-top:6px">Язык усваивается через огромный объём речи, которую вы почти понимаете (гипотеза ввода Крашена, подход Refold/AJATT). Слушание с первого дня, градуированные ридеры, затем аниме и YouTube с японскими субтитрами. Это самая большая часть времени.</p></div>
+   <div class="card"><span class="chip ai">20–25% времени</span><h2 style="margin-top:8px">Грамматика как карта</h2><p class="small" style="margin-top:6px">Учебник даёт быстрый обзор структур, чтобы ввод стал понятным. Задача не выучить правила наизусть, а узнавать их в речи. Genki → Tobira → 新完全マスター покрывают N5–N2 и подходят под формат JLPT.</p></div>
+   <div class="card"><span class="chip ai">10–20% времени</span><h2 style="margin-top:8px">Речь с обратной связью</h2><p class="small" style="margin-top:6px">Гипотеза вывода (Свейн): говоря, вы замечаете, чего не хватает. Шэдоуинг с первых недель для произношения, ИИ-сэнсэй для ежедневной письменной практики, italki с 5-го месяца. В языковой школе вы сразу будете говорить, этот навык нельзя откладывать.</p></div>
+  </div>
+  <div class="grid g2" style="align-items:start">
+   <div class="card"><h2>Сколько часов нужно</h2><p class="small muted" style="margin:4px 0 10px">Ориентиры для учеников без знания иероглифов (опрос Japan Educational Exchanges and Services). Срок указан при 2,5 часа в день.</p>
+    <div class="tbl-wrap"><table><thead><tr><th>Уровень</th><th>Часы</th><th>Срок</th></tr></thead><tbody>${rows.map(r => `<tr><td><b>${r[0]}</b></td><td style="font-variant-numeric:tabular-nums">${r[1]}</td><td>${r[2]}</td></tr>`).join("")}</tbody></table></div>
+    <p class="small" style="margin-top:10px">При 2–3 часах в день к переезду набирается около <b>1250 часов</b>. Этого хватает на уверенный N3. Год в языковой школе (≈ 800 аудиторных часов плюс жизнь в языковой среде) выводит на N2 и EJU к поступлению.</p></div>
+   <div class="card"><h2>Что не работает</h2><ul class="ul small">
+    <li><b>Только Duolingo и приложения.</b> Хорошо для привычки, но за год не дают даже N4.</li>
+    <li><b>Ромадзи дольше недели.</b> Кана учится за 2 недели, а потом мешает только ромадзи.</li>
+    <li><b>Изучение кандзи отдельно от слов.</b> Учите кандзи вместе со словами, где они встречаются.</li>
+    <li><b>Пропуск повторений.</b> Один пропущенный день — двойная нагрузка завтра. Лучше 10 минут, чем ноль.</li>
+    <li><b>Ждать готовности, чтобы начать говорить.</b> Начинайте с первых недель хотя бы с шэдоуинга.</li>
+   </ul>
+   <h2 style="margin-top:16px">Распорядок дня (этап 一)</h2>
+   <ul class="ul small"><li>Утро, 35 мин: карточки (по дороге или за завтраком)</li><li>День, 40 мин: учебник и грамматика</li><li>Вечер, 45 мин: видео или подкаст для начинающих</li><li>Перед сном, 30 мин: шэдоуинг и 5 предложений сэнсэю</li></ul></div>
+  </div>
+  <div class="card"><h2>Ваш маршрут поступления</h2><div class="grid g4" style="margin-top:10px">
+   <div><div class="eyebrow">Июль 2027</div><b>JLPT N4</b><p class="small muted">Регистрация весной. Сертификат усиливает заявку в школу.</p></div>
+   <div><div class="eyebrow">Осень 2027</div><b>Заявка в школу</b><p class="small muted">Апрельский набор: документы обычно принимают за 5–7 месяцев до старта.</p></div>
+   <div><div class="eyebrow">Декабрь 2027</div><b>JLPT N3</b><p class="small muted">Цель перед переездом, даёт место в группе продвинутого уровня.</p></div>
+   <div><div class="eyebrow">2028 → апрель 2029</div><b>EJU + N2 → университет</b><p class="small muted">EJU в июне и ноябре, подача в вузы осенью 2028.</p></div>
+  </div><p class="small muted" style="margin-top:10px">Сроки подачи и требования отличаются между школами и вузами. Проверяйте их на сайтах конкретных учебных заведений.</p></div>`;
+};
+
+render();
+initCloud();
+</script>
+</body></html>
