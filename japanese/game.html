@@ -1,0 +1,644 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0f1630"><style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}[hidden]{display:none!important}</style>
+<title>Ночные фонари</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Zen+Maru+Gothic:wght@500;700;900&display=swap">
+<style>
+/* Layout: one night-town stage (canvas) with HUD above and answer controls below; single deliberate night look */
+:root{
+  --night:#0f1630; --night-2:#18224a; --panel:#1d2752; --line:#2f3b70;
+  --paper:#f3ead7; --mute:#a9b0cf; --lantern:#e8553a; --glow:#ffb35c; --ok:#7fd8a0; --bad:#ff7a7a;
+  --f-ui:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-jp:"Zen Maru Gothic","Hiragino Maru Gothic ProN","Noto Sans JP",sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--night);color:var(--paper);font-family:var(--f-ui);font-size:15px}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--glow);outline-offset:2px}
+.wrap{max-width:900px;margin:0 auto;padding-block:16px 28px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:12px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.logo{display:flex;align-items:baseline;gap:10px}
+.logo b{font-family:var(--f-jp);font-weight:900;font-size:26px;color:var(--glow)}
+.logo span{font-weight:800;font-size:18px}
+.hud{display:flex;gap:16px;font-variant-numeric:tabular-nums;font-weight:700;align-items:center;flex-wrap:wrap}
+.hud small{display:block;font-size:11px;color:var(--mute);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.lives{letter-spacing:2px;font-size:18px}
+.stage{position:relative;border-radius:14px;overflow:hidden;border:1px solid var(--line);background:var(--night-2)}
+canvas{display:block;width:100%;height:clamp(320px,58vh,560px);touch-action:manipulation}
+.overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(10,14,32,.72)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;max-width:520px;width:100%;display:flex;flex-direction:column;gap:14px;max-height:100%;overflow-y:auto}
+.card h1{margin:0;font-size:1.5rem;font-weight:800;text-wrap:balance}
+.card p{margin:0;color:var(--mute);line-height:1.5}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg button{border:1px solid var(--line);background:transparent;border-radius:99px;padding:7px 13px;font-weight:700;font-size:14px}
+.seg button.on{background:var(--paper);color:var(--night);border-color:var(--paper)}
+.lbl{font-size:12px;color:var(--mute);font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.go{background:var(--lantern);border:0;border-radius:10px;padding:13px;font-weight:800;font-size:17px;color:#fff;box-shadow:0 0 24px rgba(232,85,58,.45)}
+.go:hover{filter:brightness(1.08)}
+.ctrl{display:flex;flex-direction:column;gap:8px}
+.type{display:flex;gap:8px}
+.type input{flex:1;min-width:0;font:inherit;font-size:22px;font-weight:700;text-align:center;padding:12px;border-radius:10px;border:2px solid var(--line);background:var(--panel);color:var(--paper)}
+.type input.err{border-color:var(--bad)}
+.opts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.opts button{background:var(--panel);border:2px solid var(--line);border-radius:10px;padding:14px 6px;font-weight:800;font-size:18px;min-height:56px;word-break:break-word}
+.opts button small{display:block;font-size:11px;color:var(--mute);font-weight:600}
+.opts.words button{font-size:14px}
+.opts button:active{transform:translateY(1px)}
+.opts button.ok{border-color:var(--ok)} .opts button.bad{border-color:var(--bad)}
+.hint{font-size:12px;color:var(--mute);text-align:center}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;text-align:center}
+.stats div{background:var(--night-2);border-radius:10px;padding:10px}
+.stats b{display:block;font-size:1.5rem;font-variant-numeric:tabular-nums}
+.stats span{font-size:12px;color:var(--mute)}
+.miss{font-family:var(--f-jp);font-size:20px;display:flex;flex-wrap:wrap;gap:8px}
+.miss span{background:var(--night-2);border:1px solid var(--line);border-radius:8px;padding:4px 8px}
+.miss small{font-family:var(--f-ui);font-size:12px;color:var(--mute);margin-left:4px}
+.icon{border:1px solid var(--line);background:transparent;border-radius:8px;padding:6px 10px;font-weight:700;font-size:13px}
+.rank{display:flex;align-items:center;gap:10px;background:var(--night-2);border-radius:10px;padding:10px 12px}
+.rank b{font-family:var(--f-jp);font-size:22px;color:var(--glow)}
+.bar{flex:1;height:8px;border-radius:99px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--glow)}
+@media (max-width:560px){.opts{grid-template-columns:repeat(2,minmax(0,1fr))}.hud{gap:12px}.logo span{display:none}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head><body>
+
+<div class="wrap">
+  <div class="top">
+    <div class="logo"><b>夜の灯</b><span>Ночные фонари</span></div>
+    <div class="hud">
+      <div><small>Очки</small><span id="hScore">0</span></div>
+      <div><small>Комбо</small><span id="hCombo">×1</span></div>
+      <div><small>Уровень</small><span id="hLevel">1</span></div>
+      <div><small>Жизни</small><span class="lives" id="hLives">🏮🏮🏮</span></div>
+      <button class="icon" id="pauseBtn" hidden>Пауза</button>
+    </div>
+  </div>
+  <div class="stage">
+    <canvas id="cv" aria-label="Игровое поле: падающие фонарики со знаками"></canvas>
+    <div class="overlay" id="menu"></div>
+  </div>
+  <div class="ctrl" id="ctrl" hidden>
+    <form class="type" id="typeForm" hidden><input id="typeIn" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="Пишите латиницей: ka, shi…" aria-label="Ответ латиницей"></form>
+    <div class="opts" id="opts" hidden></div>
+    <div class="hint" id="hint"></div>
+  </div>
+</div>
+<script>
+// ===== DATA =====
+const KANA_ROWS = [
+  // [group, romaji (space-separated, _ = empty), hiragana, katakana]
+  ["base","a i u e o","あいうえお","アイウエオ"],
+  ["base","ka ki ku ke ko","かきくけこ","カキクケコ"],
+  ["base","sa shi su se so","さしすせそ","サシスセソ"],
+  ["base","ta chi tsu te to","たちつてと","タチツテト"],
+  ["base","na ni nu ne no","なにぬねの","ナニヌネノ"],
+  ["base","ha hi fu he ho","はひふへほ","ハヒフヘホ"],
+  ["base","ma mi mu me mo","まみむめも","マミムメモ"],
+  ["base","ya _ yu _ yo","や_ゆ_よ","ヤ_ユ_ヨ"],
+  ["base","ra ri ru re ro","らりるれろ","ラリルレロ"],
+  ["base","wa _ _ _ wo","わ___を","ワ___ヲ"],
+  ["base","n _ _ _ _","ん____","ン____"],
+  ["dak","ga gi gu ge go","がぎぐげご","ガギグゲゴ"],
+  ["dak","za ji zu ze zo","ざじずぜぞ","ザジズゼゾ"],
+  ["dak","da ji zu de do","だぢづでど","ダヂヅデド"],
+  ["dak","ba bi bu be bo","ばびぶべぼ","バビブベボ"],
+  ["dak","pa pi pu pe po","ぱぴぷぺぽ","パピプペポ"],
+];
+const YOON = [
+  ["kya","きゃ","キャ"],["kyu","きゅ","キュ"],["kyo","きょ","キョ"],
+  ["sha","しゃ","シャ"],["shu","しゅ","シュ"],["sho","しょ","ショ"],
+  ["cha","ちゃ","チャ"],["chu","ちゅ","チュ"],["cho","ちょ","チョ"],
+  ["nya","にゃ","ニャ"],["nyu","にゅ","ニュ"],["nyo","にょ","ニョ"],
+  ["hya","ひゃ","ヒャ"],["hyu","ひゅ","ヒュ"],["hyo","ひょ","ヒョ"],
+  ["mya","みゃ","ミャ"],["myu","みゅ","ミュ"],["myo","みょ","ミョ"],
+  ["rya","りゃ","リャ"],["ryu","りゅ","リュ"],["ryo","りょ","リョ"],
+  ["gya","ぎゃ","ギャ"],["gyu","ぎゅ","ギュ"],["gyo","ぎょ","ギョ"],
+  ["ja","じゃ","ジャ"],["ju","じゅ","ジュ"],["jo","じょ","ジョ"],
+  ["bya","びゃ","ビャ"],["byu","びゅ","ビュ"],["byo","びょ","ビョ"],
+  ["pya","ぴゃ","ピャ"],["pyu","ぴゅ","ピュ"],["pyo","ぴょ","ピョ"],
+];
+// flatten kana to list of {r, h, k, g}
+const KANA = [];
+KANA_ROWS.forEach(([g, rs, hs, ks]) => {
+  const r = rs.split(" "), h = [...hs], k = [...ks];
+  r.forEach((x, i) => { if (x !== "_") KANA.push({ r: x, h: h[i], k: k[i], g }); });
+});
+YOON.forEach(([r, h, k]) => KANA.push({ r, h, k, g: "yoon" }));
+
+// Vocabulary: kanji|kana|перевод|тема  (N5 core, ordered for learning)
+const VOCAB_RAW = `
+私|わたし|я|люди
+あなた|あなた|ты, вы|люди
+人|ひと|человек|люди
+友達|ともだち|друг|люди
+先生|せんせい|учитель|люди
+学生|がくせい|студент|люди
+家族|かぞく|семья|люди
+父|ちち|(мой) папа|люди
+母|はは|(моя) мама|люди
+お父さん|おとうさん|папа (чужой / обращение)|люди
+お母さん|おかあさん|мама (чужая / обращение)|люди
+兄|あに|(мой) старший брат|люди
+姉|あね|(моя) старшая сестра|люди
+弟|おとうと|младший брат|люди
+妹|いもうと|младшая сестра|люди
+子供|こども|ребёнок|люди
+男|おとこ|мужчина|люди
+女|おんな|женщина|люди
+名前|なまえ|имя|люди
+こんにちは|こんにちは|здравствуйте|фразы
+おはようございます|おはようございます|доброе утро|фразы
+こんばんは|こんばんは|добрый вечер|фразы
+ありがとう|ありがとう|спасибо|фразы
+すみません|すみません|извините; простите (позвать)|фразы
+ごめんなさい|ごめんなさい|простите (виноват)|фразы
+お願いします|おねがいします|пожалуйста (прошу)|фразы
+はい|はい|да|фразы
+いいえ|いいえ|нет|фразы
+さようなら|さようなら|до свидания|фразы
+いただきます|いただきます|приятного аппетита (перед едой)|фразы
+ごちそうさまでした|ごちそうさまでした|спасибо за еду|фразы
+これ|これ|это (возле меня)|указатели
+それ|それ|это (возле тебя)|указатели
+あれ|あれ|вон то|указатели
+どれ|どれ|который?|указатели
+ここ|ここ|здесь|указатели
+そこ|そこ|там (возле тебя)|указатели
+あそこ|あそこ|вон там|указатели
+どこ|どこ|где?|указатели
+何|なに|что?|вопросы
+誰|だれ|кто?|вопросы
+いつ|いつ|когда?|вопросы
+どう|どう|как?|вопросы
+どうして|どうして|почему?|вопросы
+いくら|いくら|сколько стоит?|вопросы
+いくつ|いくつ|сколько штук? сколько лет?|вопросы
+一|いち|один|числа
+二|に|два|числа
+三|さん|три|числа
+四|よん|четыре|числа
+五|ご|пять|числа
+六|ろく|шесть|числа
+七|なな|семь|числа
+八|はち|восемь|числа
+九|きゅう|девять|числа
+十|じゅう|десять|числа
+百|ひゃく|сто|числа
+千|せん|тысяча|числа
+万|まん|десять тысяч|числа
+円|えん|иена|числа
+今日|きょう|сегодня|время
+明日|あした|завтра|время
+昨日|きのう|вчера|время
+今|いま|сейчас|время
+毎日|まいにち|каждый день|время
+朝|あさ|утро|время
+昼|ひる|день, полдень|время
+晩|ばん|вечер|время
+夜|よる|ночь|время
+時間|じかん|время, час (длительность)|время
+週|しゅう|неделя|время
+今週|こんしゅう|эта неделя|время
+来週|らいしゅう|следующая неделя|время
+先週|せんしゅう|прошлая неделя|время
+月|つき|месяц; луна|время
+年|とし|год; возраст|время
+今年|ことし|этот год|время
+来年|らいねん|следующий год|время
+午前|ごぜん|до полудня, a.m.|время
+午後|ごご|после полудня, p.m.|время
+月曜日|げつようび|понедельник|время
+火曜日|かようび|вторник|время
+水曜日|すいようび|среда|время
+木曜日|もくようび|четверг|время
+金曜日|きんようび|пятница|время
+土曜日|どようび|суббота|время
+日曜日|にちようび|воскресенье|время
+家|いえ|дом|места
+部屋|へや|комната|места
+学校|がっこう|школа|места
+大学|だいがく|университет|места
+教室|きょうしつ|класс, аудитория|места
+会社|かいしゃ|компания, фирма|места
+駅|えき|станция|места
+店|みせ|магазин|места
+銀行|ぎんこう|банк|места
+病院|びょういん|больница|места
+図書館|としょかん|библиотека|места
+公園|こうえん|парк|места
+郵便局|ゆうびんきょく|почта|места
+国|くに|страна|места
+日本|にほん|Япония|места
+東京|とうきょう|Токио|места
+道|みち|дорога|места
+町|まち|город, район|места
+食べ物|たべもの|еда|еда
+飲み物|のみもの|напиток|еда
+ご飯|ごはん|рис; еда|еда
+パン|パン|хлеб|еда
+肉|にく|мясо|еда
+魚|さかな|рыба|еда
+野菜|やさい|овощи|еда
+果物|くだもの|фрукты|еда
+卵|たまご|яйцо|еда
+水|みず|вода|еда
+お茶|おちゃ|чай (зелёный)|еда
+コーヒー|コーヒー|кофе|еда
+牛乳|ぎゅうにゅう|молоко|еда
+お酒|おさけ|алкоголь, сакэ|еда
+朝ご飯|あさごはん|завтрак|еда
+昼ご飯|ひるごはん|обед|еда
+晩ご飯|ばんごはん|ужин|еда
+本|ほん|книга|вещи
+新聞|しんぶん|газета|вещи
+辞書|じしょ|словарь|вещи
+鉛筆|えんぴつ|карандаш|вещи
+紙|かみ|бумага|вещи
+机|つくえ|стол (письменный)|вещи
+椅子|いす|стул|вещи
+鞄|かばん|сумка|вещи
+傘|かさ|зонт|вещи
+時計|とけい|часы|вещи
+電話|でんわ|телефон|вещи
+携帯|けいたい|мобильный телефон|вещи
+写真|しゃしん|фотография|вещи
+お金|おかね|деньги|вещи
+切符|きっぷ|билет|вещи
+車|くるま|машина|транспорт
+電車|でんしゃ|электричка|транспорт
+自転車|じてんしゃ|велосипед|транспорт
+バス|バス|автобус|транспорт
+飛行機|ひこうき|самолёт|транспорт
+地下鉄|ちかてつ|метро|транспорт
+天気|てんき|погода|природа
+雨|あめ|дождь|природа
+雪|ゆき|снег|природа
+山|やま|гора|природа
+川|かわ|река|природа
+海|うみ|море|природа
+花|はな|цветок|природа
+木|き|дерево|природа
+空|そら|небо|природа
+犬|いぬ|собака|природа
+猫|ねこ|кошка|природа
+春|はる|весна|природа
+夏|なつ|лето|природа
+秋|あき|осень|природа
+冬|ふゆ|зима|природа
+目|め|глаз|тело
+耳|みみ|ухо|тело
+口|くち|рот|тело
+手|て|рука (кисть)|тело
+足|あし|нога|тело
+頭|あたま|голова|тело
+体|からだ|тело|тело
+日本語|にほんご|японский язык|учёба
+英語|えいご|английский язык|учёба
+言葉|ことば|слово, язык|учёба
+漢字|かんじ|кандзи (иероглифы)|учёба
+宿題|しゅくだい|домашнее задание|учёба
+試験|しけん|экзамен|учёба
+質問|しつもん|вопрос|учёба
+勉強|べんきょう|учёба|учёба
+仕事|しごと|работа|учёба
+大きい|おおきい|большой|прилагательные
+小さい|ちいさい|маленький|прилагательные
+新しい|あたらしい|новый|прилагательные
+古い|ふるい|старый (о вещах)|прилагательные
+高い|たかい|высокий; дорогой|прилагательные
+安い|やすい|дешёвый|прилагательные
+低い|ひくい|низкий|прилагательные
+長い|ながい|длинный|прилагательные
+短い|みじかい|короткий|прилагательные
+良い|いい|хороший|прилагательные
+悪い|わるい|плохой|прилагательные
+暑い|あつい|жаркий (о погоде)|прилагательные
+寒い|さむい|холодный (о погоде)|прилагательные
+冷たい|つめたい|холодный (на ощупь)|прилагательные
+難しい|むずかしい|трудный|прилагательные
+易しい|やさしい|лёгкий, простой|прилагательные
+面白い|おもしろい|интересный, смешной|прилагательные
+楽しい|たのしい|весёлый, приятный|прилагательные
+美味しい|おいしい|вкусный|прилагательные
+忙しい|いそがしい|занятой|прилагательные
+多い|おおい|многочисленный|прилагательные
+少ない|すくない|немногочисленный|прилагательные
+早い|はやい|ранний|прилагательные
+速い|はやい|быстрый|прилагательные
+遠い|とおい|далёкий|прилагательные
+近い|ちかい|близкий|прилагательные
+白い|しろい|белый|прилагательные
+黒い|くろい|чёрный|прилагательные
+赤い|あかい|красный|прилагательные
+青い|あおい|синий|прилагательные
+好き|すき|нравится, любимый|прилагательные
+嫌い|きらい|не нравится|прилагательные
+元気|げんき|здоровый, бодрый|прилагательные
+静か|しずか|тихий|прилагательные
+有名|ゆうめい|знаменитый|прилагательные
+綺麗|きれい|красивый; чистый|прилагательные
+便利|べんり|удобный|прилагательные
+大丈夫|だいじょうぶ|в порядке, нормально|прилагательные
+上手|じょうず|умелый|прилагательные
+下手|へた|неумелый|прилагательные
+暇|ひま|свободный (время)|прилагательные
+行く|いく|идти, ехать|глаголы
+来る|くる|приходить|глаголы
+帰る|かえる|возвращаться домой|глаголы
+食べる|たべる|есть|глаголы
+飲む|のむ|пить|глаголы
+見る|みる|смотреть|глаголы
+聞く|きく|слушать; спрашивать|глаголы
+読む|よむ|читать|глаголы
+書く|かく|писать|глаголы
+話す|はなす|говорить|глаголы
+言う|いう|сказать|глаголы
+する|する|делать|глаголы
+買う|かう|покупать|глаголы
+売る|うる|продавать|глаголы
+会う|あう|встречаться|глаголы
+待つ|まつ|ждать|глаголы
+起きる|おきる|вставать, просыпаться|глаголы
+寝る|ねる|спать, ложиться спать|глаголы
+分かる|わかる|понимать|глаголы
+ある|ある|быть, иметься (неодуш.)|глаголы
+いる|いる|быть, находиться (одуш.)|глаголы
+住む|すむ|жить (где-то)|глаголы
+働く|はたらく|работать|глаголы
+休む|やすむ|отдыхать|глаголы
+始まる|はじまる|начинаться|глаголы
+終わる|おわる|заканчиваться|глаголы
+入る|はいる|входить|глаголы
+出る|でる|выходить|глаголы
+乗る|のる|садиться (в транспорт)|глаголы
+降りる|おりる|выходить (из транспорта)|глаголы
+歩く|あるく|ходить пешком|глаголы
+走る|はしる|бегать|глаголы
+泳ぐ|およぐ|плавать|глаголы
+作る|つくる|делать, готовить|глаголы
+使う|つかう|использовать|глаголы
+持つ|もつ|держать, иметь|глаголы
+知る|しる|узнать (知っている — знать)|глаголы
+教える|おしえる|учить, объяснять|глаголы
+習う|ならう|учиться (у кого-то)|глаголы
+覚える|おぼえる|запоминать|глаголы
+忘れる|わすれる|забывать|глаголы
+開ける|あける|открывать|глаголы
+閉める|しめる|закрывать|глаголы
+付ける|つける|включать|глаголы
+消す|けす|выключать, стирать|глаголы
+あげる|あげる|давать (от меня)|глаголы
+もらう|もらう|получать|глаголы
+くれる|くれる|давать (мне)|глаголы
+遊ぶ|あそぶ|играть, гулять|глаголы
+撮る|とる|фотографировать|глаголы
+洗う|あらう|мыть|глаголы
+`.trim().split("\n").map((l, i) => { const [w, r, m, t] = l.split("|"); return { id: "vo" + i, w, r, m, t }; });
+
+// ===== GAME =====
+const $ = s => document.querySelector(s);
+const cv = $("#cv"), cx = cv.getContext("2d");
+const ALT = { shi: ["si"], chi: ["ti"], tsu: ["tu"], fu: ["hu"], ji: ["zi", "di"], zu: ["du"], wo: ["o"], sha: ["sya"], shu: ["syu"], sho: ["syo"], cha: ["tya", "cya"], chu: ["tyu", "cyu"], cho: ["tyo", "cyo"], ja: ["jya", "zya"], ju: ["jyu", "zyu"], jo: ["jyo", "zyo"], n: ["nn"] };
+const answersOf = r => [r, ...(ALT[r] || [])];
+const RANKS = [["初心者", "Новичок", 0], ["見習い", "Ученик", 300], ["学生", "Студент", 1000], ["先輩", "Сэмпай", 2500], ["達人", "Мастер", 6000], ["名人", "Гуру", 12000]];
+const BASE_ROWS = KANA_ROWS.map(r => r[1].split(" ").filter(x => x !== "_"));
+
+// ---------- saved progress (per browser) ----------
+const LS = "yoru-no-tomoshibi-v1";
+let P = { xp: 0, best: {}, pops: 0, opt: { script: "h", content: "kana", input: matchMedia("(pointer:coarse)").matches ? "tap" : "type", pool: "grow", speech: true, sound: true } };
+try { const r = JSON.parse(localStorage.getItem(LS)); if (r) P = { ...P, ...r, opt: { ...P.opt, ...(r.opt || {}) } }; } catch (e) {}
+const saveP = () => { try { localStorage.setItem(LS, JSON.stringify(P)); } catch (e) {} };
+
+// ---------- audio ----------
+let ac = null;
+function beep(f, d = .09, type = "sine", vol = .08) {
+  if (!P.opt.sound) return;
+  try { ac ||= new (window.AudioContext || window.webkitAudioContext)(); const o = ac.createOscillator(), g = ac.createGain(); o.type = type; o.frequency.value = f; g.gain.setValueAtTime(vol, ac.currentTime); g.gain.exponentialRampToValueAtTime(.0001, ac.currentTime + d); o.connect(g).connect(ac.destination); o.start(); o.stop(ac.currentTime + d); } catch (e) {}
+}
+function speak(t) {
+  if (!P.opt.speech) return;
+  try { const u = new SpeechSynthesisUtterance(t); u.lang = "ja-JP"; u.rate = 1; const v = speechSynthesis.getVoices().find(v => v.lang?.startsWith("ja")); if (v) u.voice = v; speechSynthesis.cancel(); speechSynthesis.speak(u); } catch (e) {}
+}
+
+// ---------- scene ----------
+let W = 0, H = 0, DPR = 1, stars = [], roofs = [];
+function resize() {
+  DPR = Math.min(2, window.devicePixelRatio || 1);
+  const r = cv.getBoundingClientRect(); W = r.width; H = r.height;
+  cv.width = W * DPR; cv.height = H * DPR; cx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  stars = Array.from({ length: Math.round(W * H / 6000) }, () => [Math.random() * W, Math.random() * H * .6, Math.random() * 1.3 + .3, Math.random() * 6]);
+  roofs = []; let x = -20;
+  while (x < W + 20) { const w = 70 + Math.random() * 90, h = 30 + Math.random() * 40; roofs.push([x, w, h, Math.random() < .35]); x += w - 6; }
+}
+const groundY = () => H - 46;
+function drawScene(t) {
+  const g = cx.createLinearGradient(0, 0, 0, H); g.addColorStop(0, "#0b1029"); g.addColorStop(.7, "#1b2656"); g.addColorStop(1, "#2a2f5e");
+  cx.fillStyle = g; cx.fillRect(0, 0, W, H);
+  for (const [x, y, r, p] of stars) { cx.globalAlpha = .4 + .4 * Math.sin(t / 900 + p); cx.fillStyle = "#f3ead7"; cx.beginPath(); cx.arc(x, y, r, 0, 7); cx.fill(); }
+  cx.globalAlpha = 1;
+  const mx = W - 70, my = 60; const mg = cx.createRadialGradient(mx, my, 10, mx, my, 80); mg.addColorStop(0, "rgba(255,240,200,.35)"); mg.addColorStop(1, "rgba(255,240,200,0)");
+  cx.fillStyle = mg; cx.fillRect(mx - 80, my - 80, 160, 160); cx.fillStyle = "#f6edd2"; cx.beginPath(); cx.arc(mx, my, 24, 0, 7); cx.fill();
+  const gy = groundY();
+  cx.fillStyle = "#0a0e22";
+  for (const [x, w, h, tower] of roofs) {
+    const top = gy - h - (tower ? 30 : 0);
+    cx.fillRect(x + 10, top + 14, w - 20, gy - top);
+    cx.beginPath(); cx.moveTo(x - 6, top + 18); cx.quadraticCurveTo(x + w * .25, top + 10, x + w / 2, top - 4); cx.quadraticCurveTo(x + w * .75, top + 10, x + w + 6, top + 18); cx.closePath(); cx.fill();
+    if (tower) { cx.beginPath(); cx.moveTo(x + 4, top + 44); cx.quadraticCurveTo(x + w / 2, top + 30, x + w - 4, top + 44); cx.lineTo(x + w - 4, top + 50); cx.lineTo(x + 4, top + 50); cx.fill(); }
+    cx.fillStyle = "rgba(255,179,92,.55)";
+    for (let wx = x + 20; wx < x + w - 24; wx += 20) if ((wx * 7 + h) % 3 < 1.4) cx.fillRect(wx, gy - 22, 8, 10);
+    cx.fillStyle = "#0a0e22";
+  }
+  cx.fillRect(0, gy, W, H - gy);
+}
+
+// ---------- game state ----------
+let G = null, raf = 0, last = 0;
+function poolKana() {
+  const o = P.opt, rows = o.pool === "all" ? BASE_ROWS.length + 1 : Math.min(BASE_ROWS.length + 1, 1 + (G?.level || 1));
+  const allowed = new Set(BASE_ROWS.slice(0, rows).flat()); if (rows > BASE_ROWS.length) YOON.forEach(y => allowed.add(y[0]));
+  const list = KANA.filter((k, i) => allowed.has(k.r) && (rows > 11 || k.g === "base"));
+  return list.map(k => ({ text: o.script === "k" ? k.k : o.script === "h" ? k.h : (Math.random() < .5 ? k.h : k.k), ans: k.r, say: k.h }));
+}
+function poolWords() { const n = Math.min(VOCAB_RAW.length, 30 + (G?.level || 1) * 15); return VOCAB_RAW.slice(0, P.opt.pool === "all" ? VOCAB_RAW.length : n); }
+function newItem() {
+  const words = P.opt.content === "words";
+  let it;
+  if (words) { const p = poolWords(), v = p[Math.floor(Math.random() * p.length)]; it = { text: v.w, sub: v.w === v.r ? "" : v.r, ans: v.m, say: v.r, word: v }; }
+  else { const p = poolKana(); it = p[Math.floor(Math.random() * p.length)]; it = { ...it, sub: "" }; }
+  if (G.items.some(x => x.text === it.text)) return null;
+  cx.font = `700 ${words ? 22 : 30}px ${getComputedStyle(document.documentElement).getPropertyValue("--f-jp")}`;
+  const w = Math.max(56, cx.measureText(it.text).width + 26);
+  const x = 10 + Math.random() * Math.max(10, W - w - 20);
+  const sp = (H / (11 - Math.min(G.level, 8) * .8)) * (words ? .55 : 1);
+  return { ...it, x, y: -60, w, h: words ? 64 : 62, vy: sp * (.85 + Math.random() * .3), sway: Math.random() * 6 };
+}
+function start() {
+  G = { score: 0, combo: 0, maxCombo: 0, level: 1, lives: 3, items: [], fx: [], pops: 0, tries: 0, hits: 0, missed: {}, spawnT: 0, paused: false, over: false, target: null };
+  $("#menu").hidden = true; $("#ctrl").hidden = false; $("#pauseBtn").hidden = false; $("#pauseBtn").textContent = "Пауза";
+  const tapMode = P.opt.input === "tap" || P.opt.content === "words";
+  $("#typeForm").hidden = tapMode; $("#opts").hidden = !tapMode; $("#opts").className = "opts" + (P.opt.content === "words" ? " words" : "");
+  $("#hint").textContent = tapMode ? (matchMedia("(pointer:coarse)").matches ? "Нажмите правильный ответ для самого нижнего фонарика" : "Нажмите ответ или клавиши 1–4. Ответ относится к нижнему фонарику") : "Печатайте чтение любого фонарика, Enter не нужен";
+  if (!tapMode) { $("#typeIn").value = ""; $("#typeIn").focus(); }
+  hud(); last = performance.now(); cancelAnimationFrame(raf); raf = requestAnimationFrame(loop);
+}
+function hud() {
+  $("#hScore").textContent = G.score; $("#hCombo").textContent = "×" + mult(); $("#hLevel").textContent = G.level;
+  $("#hLives").textContent = "🏮".repeat(G.lives) + "·".repeat(3 - G.lives);
+}
+const mult = () => 1 + Math.floor((G?.combo || 0) / 5);
+function pop(it, fromType) {
+  G.items = G.items.filter(x => x !== it);
+  G.combo++; G.maxCombo = Math.max(G.maxCombo, G.combo); G.hits++; G.tries++; G.pops++;
+  const pts = 10 * mult(); G.score += pts;
+  for (let i = 0; i < 14; i++) { const a = Math.random() * 7, s = 60 + Math.random() * 140; G.fx.push({ x: it.x + it.w / 2, y: it.y + it.h / 2, vx: Math.cos(a) * s, vy: Math.sin(a) * s, life: .7, c: Math.random() < .5 ? "#ffb35c" : "#f3ead7" }); }
+  G.fx.push({ text: "+" + pts, x: it.x + it.w / 2, y: it.y, vy: -40, life: .9, c: "#7fd8a0" });
+  beep(520 + Math.min(G.combo, 20) * 30, .08, "triangle"); speak(it.say);
+  if (G.pops % 10 === 0) { G.level++; beep(880, .2, "sine", .06); G.fx.push({ text: "Уровень " + G.level + "!", x: W / 2, y: H / 2.5, vy: -10, life: 1.6, c: "#ffb35c", big: true }); }
+  hud(); if (!fromType) refreshOpts(true);
+}
+function wrong() { G.combo = 0; G.tries++; beep(160, .18, "sawtooth", .05); hud(); }
+function miss(it) {
+  G.items = G.items.filter(x => x !== it); G.lives--; G.combo = 0;
+  const key = it.text; G.missed[key] = it.word ? `${it.word.r} — ${it.ans}` : it.ans;
+  G.fx.push({ text: it.text + " = " + it.ans, x: Math.min(Math.max(it.x + it.w / 2, 90), W - 90), y: groundY() - 30, vy: -20, life: 1.8, c: "#ff7a7a" });
+  beep(110, .3, "square", .05); hud(); refreshOpts(true);
+  if (G.lives <= 0) gameOver();
+}
+function loop(now) {
+  const dt = Math.min(.05, (now - last) / 1000); last = now;
+  if (G && !G.paused && !G.over) {
+    G.spawnT -= dt;
+    const maxItems = P.opt.content === "words" ? 3 : 4 + Math.min(G.level, 6);
+    if (G.spawnT <= 0 && G.items.length < maxItems) { const it = newItem(); if (it) G.items.push(it); G.spawnT = Math.max(.75, 2.4 - G.level * .16) * (P.opt.content === "words" ? 1.6 : 1); }
+    for (const it of [...G.items]) { it.y += it.vy * dt; if (it.y + it.h > groundY()) miss(it); }
+    for (const f of G.fx) { f.life -= dt; f.x += (f.vx || 0) * dt; f.y += f.vy * dt; if (!f.text) f.vy += 220 * dt; }
+    G.fx = G.fx.filter(f => f.life > 0);
+    refreshOpts(false);
+  }
+  drawScene(now); if (G) drawItems(now);
+  raf = requestAnimationFrame(loop);
+}
+function drawItems(t) {
+  const jp = getComputedStyle(document.documentElement).getPropertyValue("--f-jp");
+  const target = lowest();
+  for (const it of G.items) {
+    const x = it.x + Math.sin(t / 700 + it.sway) * 3, y = it.y, { w, h } = it;
+    const glow = cx.createRadialGradient(x + w / 2, y + h / 2, 4, x + w / 2, y + h / 2, w);
+    glow.addColorStop(0, it === target && $("#typeForm").hidden ? "rgba(255,200,120,.55)" : "rgba(255,179,92,.32)"); glow.addColorStop(1, "rgba(255,179,92,0)");
+    cx.fillStyle = glow; cx.fillRect(x - w / 2, y - h / 2, w * 2, h * 2);
+    cx.strokeStyle = "rgba(243,234,215,.25)"; cx.beginPath(); cx.moveTo(x + w / 2, y - 14); cx.lineTo(x + w / 2, y); cx.stroke();
+    cx.fillStyle = "#e8553a"; cx.beginPath(); cx.roundRect(x, y, w, h, 20); cx.fill();
+    cx.fillStyle = "rgba(0,0,0,.12)"; for (let i = 1; i < 4; i++) cx.fillRect(x + 4, y + h * i / 4, w - 8, 1.5);
+    cx.fillStyle = "#2a1414"; cx.beginPath(); cx.roundRect(x + w * .2, y - 4, w * .6, 7, 3); cx.fill(); cx.beginPath(); cx.roundRect(x + w * .2, y + h - 3, w * .6, 7, 3); cx.fill();
+    if (it === target && $("#typeForm").hidden) { cx.strokeStyle = "#ffe2a8"; cx.lineWidth = 2.5; cx.beginPath(); cx.roundRect(x - 3, y - 3, w + 6, h + 6, 22); cx.stroke(); cx.lineWidth = 1; }
+    cx.fillStyle = "#fff8e8"; cx.textAlign = "center"; cx.textBaseline = "middle";
+    if (it.sub) { cx.font = `700 22px ${jp}`; cx.fillText(it.text, x + w / 2, y + h / 2 - 7); cx.font = `500 12px ${jp}`; cx.fillStyle = "#ffe2c4"; cx.fillText(it.sub, x + w / 2, y + h / 2 + 15); }
+    else { cx.font = `700 ${P.opt.content === "words" ? 22 : 30}px ${jp}`; cx.fillText(it.text, x + w / 2, y + h / 2 + 1); }
+  }
+  for (const f of G.fx) {
+    cx.globalAlpha = Math.max(0, Math.min(1, f.life * 1.5)); cx.fillStyle = f.c;
+    if (f.text) { cx.font = `800 ${f.big ? 30 : 16}px Manrope, sans-serif`; cx.textAlign = "center"; cx.fillText(f.text, f.x, f.y); }
+    else { cx.beginPath(); cx.arc(f.x, f.y, 2.5, 0, 7); cx.fill(); }
+  }
+  cx.globalAlpha = 1;
+  if (G.paused) { cx.fillStyle = "rgba(10,14,32,.6)"; cx.fillRect(0, 0, W, H); cx.fillStyle = "#f3ead7"; cx.font = "800 28px Manrope, sans-serif"; cx.textAlign = "center"; cx.fillText("Пауза", W / 2, H / 2); }
+}
+const lowest = () => G.items.reduce((a, b) => (!a || b.y > a.y ? b : a), null);
+
+// ---------- tap / choice controls ----------
+function refreshOpts(force) {
+  const box = $("#opts"); if (box.hidden || !G) return;
+  const t = lowest();
+  if (!force && t === G.target) return;
+  G.target = t;
+  if (!t) { box.innerHTML = ""; return; }
+  const words = P.opt.content === "words";
+  const pool = words ? (VOCAB_RAW.filter(v => v.t === t.word.t && v.m !== t.ans).length >= 3 ? VOCAB_RAW.filter(v => v.t === t.word.t) : VOCAB_RAW).map(v => v.m) : poolKana().map(k => k.ans).concat(KANA.filter(k => k.g === "base").map(k => k.r));
+  const opts = new Set([t.ans]); let guard = 0;
+  while (opts.size < 4 && guard++ < 200) opts.add(pool[Math.floor(Math.random() * pool.length)]);
+  const arr = [...opts].sort(() => Math.random() - .5);
+  box.innerHTML = arr.map((o, i) => `<button data-a="${o.replace(/"/g, "&quot;")}"><small>${i + 1}</small>${o.replace(/</g, "&lt;")}</button>`).join("");
+  box.querySelectorAll("button").forEach(b => b.onclick = () => choose(b));
+}
+function choose(b) {
+  if (!G || G.paused || G.over || !G.target) return;
+  if (b.dataset.a === G.target.ans) { b.classList.add("ok"); pop(G.target); }
+  else { b.classList.add("bad"); b.disabled = true; wrong(); G.target.vy *= 1.15; }
+}
+document.addEventListener("keydown", e => {
+  if (!G || G.over) return;
+  if (e.key === "Escape") { togglePause(); return; }
+  if (!$("#opts").hidden && ["1", "2", "3", "4"].includes(e.key)) { const b = $("#opts").children[+e.key - 1]; if (b && !b.disabled) choose(b); }
+});
+
+// ---------- typing controls ----------
+const ti = $("#typeIn");
+ti.addEventListener("input", () => {
+  if (!G || G.paused || G.over) return;
+  const v = ti.value.trim().toLowerCase(); if (!v) return;
+  const sorted = [...G.items].sort((a, b) => b.y - a.y);
+  const hit = sorted.find(it => answersOf(it.ans).includes(v));
+  const longer = sorted.some(it => answersOf(it.ans).some(a => a.length > v.length && a.startsWith(v)));
+  if (hit && !(longer && v === "n" && hit.ans !== "n")) { pop(hit, true); ti.value = ""; ti.classList.remove("err"); return; }
+  if (!longer) { ti.classList.add("err"); wrong(); setTimeout(() => { ti.value = ""; ti.classList.remove("err"); }, 260); }
+});
+$("#typeForm").onsubmit = e => { e.preventDefault(); ti.value = ""; };
+
+// ---------- pause / over / menu ----------
+function togglePause() { if (!G || G.over) return; G.paused = !G.paused; $("#pauseBtn").textContent = G.paused ? "Продолжить" : "Пауза"; if (!G.paused) { last = performance.now(); if (!$("#typeForm").hidden) ti.focus(); } }
+$("#pauseBtn").onclick = togglePause;
+document.addEventListener("visibilitychange", () => { if (document.hidden && G && !G.over && !G.paused) togglePause(); });
+const modeKey = () => [P.opt.content, P.opt.content === "kana" ? P.opt.script : "", P.opt.pool].join("-");
+function rankOf(xp) { let i = 0; while (i + 1 < RANKS.length && xp >= RANKS[i + 1][2]) i++; return i; }
+function gameOver() {
+  G.over = true; $("#ctrl").hidden = true; $("#pauseBtn").hidden = true;
+  const k = modeKey(), best = P.best[k] || 0, rec = G.score > best;
+  if (rec) P.best[k] = G.score;
+  const before = rankOf(P.xp); P.xp += G.score; P.pops += G.pops; saveP();
+  const after = rankOf(P.xp), acc = G.tries ? Math.round(G.hits / G.tries * 100) : 0;
+  const miss = Object.entries(G.missed);
+  $("#menu").innerHTML = `<div class="card">
+   <div class="lbl">${rec ? "Новый рекорд!" : "Игра окончена"}</div><h1>${G.score} очков</h1>
+   <div class="stats"><div><b>${G.level}</b><span>уровень</span></div><div><b>${acc}%</b><span>точность</span></div><div><b>${G.maxCombo}</b><span>лучшее комбо</span></div></div>
+   ${after > before ? `<div class="rank"><b>${RANKS[after][0]}</b><span>Новое звание: ${RANKS[after][1]}</span></div>` : ""}
+   ${miss.length ? `<div><div class="lbl" style="margin-bottom:8px">Упали на крыши: повторите</div><div class="miss">${miss.map(([t, a]) => `<span>${t}<small>${a}</small></span>`).join("")}</div></div>` : ""}
+   <button class="go" id="again">Играть ещё</button><button class="icon" id="toMenu">Сменить режим</button></div>`;
+  $("#menu").hidden = false; $("#again").onclick = start; $("#toMenu").onclick = showMenu;
+}
+function showMenu() {
+  G = window.DEMO || null; $("#ctrl").hidden = true; $("#pauseBtn").hidden = true; hudIdle();
+  const o = P.opt, ri = rankOf(P.xp), next = RANKS[ri + 1];
+  const seg = (key, items) => `<div class="seg" data-k="${key}">${items.map(([v, l]) => `<button type="button" data-v="${v}" class="${o[key] === v ? "on" : ""}">${l}</button>`).join("")}</div>`;
+  $("#menu").innerHTML = `<div class="card">
+   <h1>Погасите фонарики до того, как они упадут на крыши</h1>
+   <p>На каждом фонарике знак каны или японское слово. Ответьте правильно, и фонарик лопнет. Каждые 10 фонариков уровень растёт: появляются новые знаки и скорость увеличивается.</p>
+   <div class="rank"><b>${RANKS[ri][0]}</b><div style="flex:1;min-width:0"><div style="font-weight:700">${RANKS[ri][1]} · ${P.xp} опыта</div>${next ? `<div class="bar" style="margin-top:6px"><i style="width:${(P.xp - RANKS[ri][2]) / (next[2] - RANKS[ri][2]) * 100}%"></i></div>` : ""}</div></div>
+   <div><div class="lbl">Что падает</div>${seg("content", [["kana", "Кана"], ["words", "Слова N5"]])}</div>
+   <div id="scriptRow" ${o.content === "words" ? "hidden" : ""}><div class="lbl">Азбука</div>${seg("script", [["h", "ひらがな"], ["k", "カタカナ"], ["m", "Обе"]])}</div>
+   <div id="inputRow" ${o.content === "words" ? "hidden" : ""}><div class="lbl">Как отвечать</div>${seg("input", [["type", "Печатать"], ["tap", "Выбирать из 4"]])}</div>
+   <div><div class="lbl">Набор</div>${seg("pool", [["grow", "С нуля, по строкам"], ["all", "Всё сразу"]])}</div>
+   <div class="seg" data-k="toggles"><button type="button" data-t="speech" class="${o.speech ? "on" : ""}">Озвучка</button><button type="button" data-t="sound" class="${o.sound ? "on" : ""}">Звуки</button></div>
+   <button class="go" id="play">Играть</button>
+   <p style="font-size:13px">Рекорд в этом режиме: <b style="color:var(--paper)">${P.best[modeKey()] || 0}</b></p></div>`;
+  $("#menu").hidden = false;
+  document.querySelectorAll("#menu .seg[data-k]").forEach(s => s.querySelectorAll("button").forEach(b => b.onclick = () => {
+    if (b.dataset.t) P.opt[b.dataset.t] = !P.opt[b.dataset.t]; else P.opt[s.dataset.k] = b.dataset.v;
+    saveP(); showMenu();
+  }));
+  $("#play").onclick = () => { beep(660, .05); start(); };
+}
+function hudIdle() { $("#hScore").textContent = "0"; $("#hCombo").textContent = "×1"; $("#hLevel").textContent = "1"; $("#hLives").textContent = "🏮🏮🏮"; }
+
+// demo lanterns behind the menu so the first frame shows the game
+window.addEventListener("resize", resize);
+resize();
+G = { items: [], fx: [], level: 3, paused: false, over: true };
+const demo = [["あ", .15, .2], ["か", .42, .45], ["す", .7, .3], ["ね", .85, .6]];
+const jp0 = getComputedStyle(document.documentElement).getPropertyValue("--f-jp");
+G.items = demo.map(([t, x, y], i) => ({ text: t, sub: "", ans: "", x: W * x - 28, y: (groundY() - 80) * y, w: 56, h: 62, vy: 0, sway: i }));
+window.DEMO = G;
+showMenu();
+raf = requestAnimationFrame(loop);
+</script></body></html>
