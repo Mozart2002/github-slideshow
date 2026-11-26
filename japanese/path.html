@@ -67,6 +67,8 @@ button:focus-visible{outline:3px solid var(--matcha);outline-offset:2px}
 .opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 .opt{border:2px solid var(--line);border-bottom-width:4px;background:var(--card);border-radius:14px;padding:14px 8px;font-weight:800;font-size:18px;min-height:64px;word-break:break-word}
 .opt.jpo{font-family:var(--f-jp);font-size:34px;font-weight:700}
+.opt.jpw{font-family:var(--f-jp);font-size:22px;font-weight:700}
+.node[data-locked="1"]{opacity:.85}
 .opt.sel{border-color:var(--matcha);background:var(--matcha-soft)}
 .opt.ok{border-color:var(--matcha);background:var(--matcha-soft)}
 .opt.bad{border-color:var(--bad);background:var(--bad-soft)}
@@ -517,45 +519,62 @@ const SENTENCES = [
   [["あした", "がっこう", "に", "いきます"], "Завтра пойду в школу."],
 ];
 const U = (id, title, sub, opt) => ({ id, title, sub, ...opt });
+const T = (id, title, sub, opt) => [U(id, title, sub, opt), U(id + "b", title, "Тренировка: слова и скорость", { ...opt, practice: true })];
+const KATA_WORDS = [["テレビ", "телевизор"], ["カメラ", "фотоаппарат"], ["ホテル", "гостиница"], ["タクシー", "такси"], ["レストラン", "ресторан"], ["トイレ", "туалет"], ["ロシア", "Россия"], ["アニメ", "аниме"], ["ゲーム", "игра"], ["スマホ", "смартфон"], ["パン", "хлеб"], ["コーヒー", "кофе"], ["バス", "автобус"], ["アイス", "мороженое"], ["ノート", "тетрадь"], ["ペン", "ручка"]].map(([r, m], i) => ({ id: "kw" + i, w: r, r, m, t: "катакана" }));
+const TOPICS = [["люди", "Люди и семья"], ["указатели", "Это, то, где"], ["вопросы", "Вопросы"], ["числа", "Числа и деньги"], ["время", "Время и дни"], ["места", "Места в городе"], ["еда", "Еда и напитки"], ["вещи", "Вещи вокруг"], ["транспорт", "Транспорт"], ["природа", "Природа"], ["тело", "Тело"], ["учёба", "Учёба и работа"], ["прилагательные", "Прилагательные"], ["глаголы", "Глаголы"]];
+const isHira = v => /^[぀-ゟ]+$/.test(v.r);
+const VOCAB_UNITS = TOPICS.flatMap(([t, name]) => {
+  const ws = VOCAB_RAW.filter(v => v.t === t && isHira(v)), out = [], n = Math.ceil(ws.length / 7);
+  for (let i = 0; i < n; i++) { const part = ws.slice(Math.floor(i * ws.length / n), Math.floor((i + 1) * ws.length / n)); out.push(U("w-" + t + i, n > 1 ? `${name} ${i + 1}` : name, part.slice(0, 3).map(v => v.r).join(" · ") + (part.length > 3 ? " …" : ""), { words: part.map(v => v.id), glyph: part[0].w[0], ru: true })); }
+  return out;
+});
 const COURSE = [
   { name: "Хирагана: основа", kata: false, units: [
-    U("h1", "あいうえお", "Пять гласных", { rows: [0] }),
-    U("h2", "かきくけこ", "Ряд К", { rows: [1] }),
-    U("h3", "さしすせそ", "Ряд С", { rows: [2] }),
+    ...T("h1", "あいうえお", "Пять гласных", { rows: [0] }),
+    ...T("h2", "かきくけこ", "Ряд К", { rows: [1] }),
+    ...T("h3", "さしすせそ", "Ряд С", { rows: [2] }),
     U("r1", "Повторение", "Всё, что выучили", { review: true }),
-    U("h4", "たちつてと", "Ряд Т", { rows: [3] }),
-    U("h5", "なにぬねの", "Ряд Н", { rows: [4] }),
-    U("h6", "はひふへほ", "Ряд Х", { rows: [5] }),
+    ...T("h4", "たちつてと", "Ряд Т", { rows: [3] }),
+    ...T("h5", "なにぬねの", "Ряд Н", { rows: [4] }),
+    ...T("h6", "はひふへほ", "Ряд Х", { rows: [5] }),
     U("r2", "Повторение", "Всё, что выучили", { review: true }),
-    U("h7", "まみむめも", "Ряд М", { rows: [6] }),
-    U("h8", "やゆよ", "Ряд Я", { rows: [7] }),
-    U("h9", "らりるれろ", "Ряд Р", { rows: [8] }),
-    U("h10", "わをん", "Последние знаки", { rows: [9, 10] }),
+    ...T("h7", "まみむめも", "Ряд М", { rows: [6] }),
+    ...T("h8", "やゆよ", "Ряд Я", { rows: [7] }),
+    ...T("h9", "らりるれろ", "Ряд Р", { rows: [8] }),
+    ...T("h10", "わをん", "Последние знаки", { rows: [9, 10] }),
     U("r3", "Повторение", "Вся основная хирагана", { review: true }),
   ]},
   { name: "Хирагана: звонкие и слияния", kata: false, units: [
-    U("h11", "がざだばぱ", "Две чёрточки и кружок", { rows: [11, 12, 13, 14, 15], dak: true }),
-    U("h12", "きゃ しゅ っ", "Маленькие знаки", { yoon: true }),
+    ...T("h11", "がざだばぱ", "Две чёрточки и кружок", { rows: [11, 12, 13, 14, 15], dak: true }),
+    ...T("h12", "きゃ しゅ っ", "Маленькие знаки", { yoon: true }),
     U("r4", "Повторение", "Вся хирагана", { review: true }),
   ]},
   { name: "Первые фразы", kata: false, units: [
     U("p1", "こんにちは", "Приветствия", { phrases: [0, 1, 2, 3, 4] }),
     U("p2", "さようなら", "Вежливые фразы", { phrases: [5, 6, 7, 8, 9] }),
-    U("s1", "わたしは…です", "Первые предложения", { sentences: true }),
+  ]},
+  { name: "Слова по темам", kata: false, vocab: true, units: VOCAB_UNITS },
+  { name: "Первые предложения", kata: false, units: [
+    U("s1", "わたしは…です", "Как строится предложение", { sentences: true }),
+    U("s2", "わたしは…です", "Тренировка предложений", { sentences: true, practice: true }),
   ]},
   { name: "Катакана", kata: true, units: [
-    U("k1", "アイウエオ カキクケコ", "Гласные и ряд К", { rows: [0, 1], script: "k" }),
-    U("k2", "サシスセソ タチツテト", "Ряды С и Т", { rows: [2, 3], script: "k" }),
-    U("k3", "ナニヌネノ ハヒフヘホ", "Ряды Н и Х", { rows: [4, 5], script: "k" }),
-    U("k4", "マミムメモ ヤユヨ", "Ряды М и Я", { rows: [6, 7], script: "k" }),
-    U("k5", "ラリルレロ ワヲン", "Ряд Р и последние", { rows: [8, 9, 10], script: "k" }),
-    U("k6", "ガザダバパ ー", "Звонкие и долгота", { rows: [11, 12, 13, 14, 15], script: "k", dak: true }),
+    ...T("k1", "アイウエオ カキクケコ", "Гласные и ряд К", { rows: [0, 1], script: "k" }),
+    ...T("k2", "サシスセソ タチツテト", "Ряды С и Т", { rows: [2, 3], script: "k" }),
+    ...T("k3", "ナニヌネノ ハヒフヘホ", "Ряды Н и Х", { rows: [4, 5], script: "k" }),
+    ...T("k4", "マミムメモ ヤユヨ", "Ряды М и Я", { rows: [6, 7], script: "k" }),
+    ...T("k5", "ラリルレロ ワヲン", "Ряд Р и последние", { rows: [8, 9, 10], script: "k" }),
+    ...T("k6", "ガザダバパ ー", "Звонкие и долгота", { rows: [11, 12, 13, 14, 15], script: "k", dak: true }),
+    U("kw1", "Слова на катакане", "テレビ · カメラ · ホテル …", { words: KATA_WORDS.slice(0, 8).map(v => v.id), glyph: "テ" }),
+    U("kw2", "Слова на катакане 2", "ロシア · アニメ · ゲーム …", { words: KATA_WORDS.slice(8).map(v => v.id), glyph: "ロ" }),
     U("r5", "Финал", "Вся кана и слова", { review: true }),
   ]},
 ];
 const UNITS = COURSE.flatMap((s, si) => s.units.map(u => ({ ...u, sec: si, kata: s.kata })));
 
+const WBY = {}; VOCAB_RAW.concat(KATA_WORDS).forEach(v => WBY[v.id] = v);
 function unitItems(u) {
+  if (u.practice) return [];
   const sc = u.script || "h";
   let items = (u.rows || []).flatMap(i => rowItems(i, sc));
   if (u.yoon) items = yoonItems("h");
@@ -578,10 +597,12 @@ const wordsFor = (idx, mustHave) => { const ok = allowedChars(idx, true); return
 function exPickSound(it, pool) { const opts = new Set([it.r]); for (const p of shuffle(pool)) { if (opts.size >= 4) break; opts.add(p.r); } return { type: "pick", q: "Как читается этот знак?", big: it.c, answer: it.r, options: shuffle([...opts]), say: it.c, info: MN[it.c] ? "" : "" }; }
 function exPickKana(it, pool) { const opts = new Map([[it.c, 1]]); for (const p of shuffle(pool)) { if (opts.size >= 4) break; if (p.r !== it.r) opts.set(p.c, 1); } return { type: "pick", q: `Какой знак читается «${it.r}»?`, answer: it.c, options: shuffle([...opts.keys()]), jpOpts: true, say: it.c }; }
 function exMatch(items) { const s = pick(items, Math.min(4, items.length)); return { type: "match", q: "Соедините знак и его чтение", pairs: s.map(i => [i.c, i.r]) }; }
-function exWord(v, pool) { const opts = new Set([v.m]); for (const p of shuffle(pool)) { if (opts.size >= 4) break; opts.add(p.m); } return { type: "pick", q: "Что значит это слово?", big: v.r, word: true, answer: v.m, options: shuffle([...opts]), say: v.r, info: `${toRomaji(v.r)}${v.w !== v.r ? " · " + v.w : ""}` }; }
-function exBuild(v, extra) { const t = splitKana(v.r); const tiles = shuffle([...t, ...pick(extra.filter(e => !t.includes(e)), 2)]); return { type: "build", q: `Соберите слово «${v.m}»`, hint: toRomaji(v.r), answer: t.join(""), tiles, say: v.r }; }
+function exWord(v, pool) { const opts = new Set([v.m]); for (const p of shuffle(pool)) { if (opts.size >= 4) break; opts.add(p.m); } return { type: "pick", q: "Что значит это слово?", big: v.r, word: true, answer: v.m, options: shuffle([...opts]), say: v.r, info: `${toRomaji(v.r)}${v.w !== v.r ? " · " + v.w : ""}`, v }; }
+function exWordRev(v, pool) { const opts = new Set([v.r]); for (const p of shuffle(pool)) { if (opts.size >= 4) break; if (p.m !== v.m) opts.add(p.r); } return { type: "pick", q: `Как по-японски «${v.m}»?`, answer: v.r, options: shuffle([...opts]), jpWords: true, say: v.r, info: toRomaji(v.r), v }; }
+function exMatchWords(ws) { const s = pick(ws, Math.min(4, ws.length)); return { type: "match", q: "Соедините слово и перевод", pairs: s.map(v => [v.r, v.m]), words: true }; }
+function exBuild(v, extra) { const t = splitKana(v.r); const tiles = shuffle([...t, ...pick(extra.filter(e => !t.includes(e)), 2)]); return { type: "build", q: `Соберите слово «${v.m}»`, hint: toRomaji(v.r), answer: t.join(""), tiles, say: v.r, v }; }
 
-function buildLesson(idx) {
+function buildRaw(idx) {
   const u = UNITS[idx], q = [];
   const known = [...knownBefore(idx).values()];
   if (u.review) {
@@ -602,9 +623,31 @@ function buildLesson(idx) {
     return q;
   }
   if (u.sentences) {
-    q.push({ type: "rule", title: "Как строится японское предложение", body: `<p>Сказуемое всегда в конце. Маленькие слова-частицы показывают роль слова:</p><div class="mn"><b>は</b> (читается «ва») — тема: «что касается…»<br><b>を</b> (читается «о») — над чем действие<br><b>が</b> — что нравится, что есть<br><b>に</b> — куда<br><b>です</b> — вежливое «есть, является»</div><div class="big word">わたし は がくせい です</div><p style="text-align:center">«Я студент» · watashi wa gakusei desu</p>` , say: "わたしはがくせいです" });
+    if (!u.practice) q.push({ type: "rule", title: "Как строится японское предложение", body: `<p>Сказуемое всегда в конце. Маленькие слова-частицы показывают роль слова:</p><div class="mn"><b>は</b> (читается «ва») — тема: «что касается…»<br><b>を</b> (читается «о») — над чем действие<br><b>が</b> — что нравится, что есть<br><b>に</b> — куда<br><b>です</b> — вежливое «есть, является»</div><div class="big word">わたし は がくせい です</div><p style="text-align:center">«Я студент» · watashi wa gakusei desu</p>` , say: "わたしはがくせいです" });
     SENTENCES.forEach(([parts, ru]) => q.push({ type: "build", q: `Переведите: «${ru}»`, hint: "", answer: parts.join(" "), tiles: shuffle([...parts, ...pick(["を", "に", "が", "これ", "わたし", "です"].filter(x => !parts.includes(x)), 2)]), sep: " ", say: parts.join("") }));
     SENTENCES.slice(0, 4).forEach(([parts, ru]) => q.push({ type: "pick", q: "Что значит это предложение?", big: parts.join(" "), word: true, answer: ru, options: shuffle(SENTENCES.map(s => s[1]).filter(x => x !== ru)).slice(0, 3).concat(ru).sort(() => Math.random() - .5), say: parts.join("") }));
+    return q;
+  }
+  if (u.words) {
+    const ws = u.words.map(id => WBY[id]), topicPool = VOCAB_RAW.concat(KATA_WORDS).filter(v => v.t === ws[0].t), pool = topicPool.length >= 6 ? topicPool : VOCAB_RAW;
+    ws.forEach((v, i) => { q.push({ type: "wintro", v }); q.push(exWord(v, pool)); if (i % 3 === 2) q.push(exMatchWords(ws.slice(0, i + 1))); });
+    q.push(exMatchWords(ws));
+    shuffle(ws).forEach(v => q.push(exWordRev(v, pool)));
+    pick(ws.filter(v => splitKana(v.r).length <= 5), 2).forEach(v => q.push(exBuild(v, splitKana(pick(pool, 3).map(x => x.r).join("")))));
+    pick(ws, 3).forEach(v => q.push(exWord(v, pool)));
+    return q;
+  }
+  if (u.practice && !u.sentences) {
+    const base = UNITS[idx - 1], items = unitItems(base), known2 = [...knownBefore(idx).values()].filter(k => k.script === (base.script || "h"));
+    const all = known2.length ? known2 : items;
+    items.forEach(it => q.push(exPickSound(it, all)));
+    q.push(exMatch(items), exMatch(all));
+    shuffle(items).forEach(it => q.push(exPickKana(it, all)));
+    const ws = wordsFor(idx, new Set(items.map(i => i.c))), wpool = ws.length >= 4 ? ws : VOCAB_RAW;
+    pick(ws, 5).forEach(v => q.push(exWord(v, wpool)));
+    pick(ws, 2).forEach(v => q.push(exWordRev(v, wpool)));
+    pick(ws.filter(v => splitKana(v.r).length <= 4), 3).forEach(v => q.push(exBuild(v, all.map(a => a.c))));
+    pick(all, 4).forEach(it => q.push(exPickSound(it, all)));
     return q;
   }
   const items = unitItems(u), pool = [...items, ...known.filter(k => k.script === (u.script || "h"))];
@@ -637,10 +680,20 @@ function buildLesson(idx) {
   return q;
 }
 
+function buildLesson(idx) {
+  const q = buildRaw(idx), out = [], shown = new Set();
+  for (const e of q) {
+    if (e.v && !S.seen[e.v.id] && !shown.has(e.v.id)) { out.push({ type: "wintro", v: e.v }); shown.add(e.v.id); }
+    if (e.type === "match" && e.words) e.pairs.forEach(([r]) => { const v = Object.values(WBY).find(x => x.r === r); if (v && !S.seen[v.id] && !shown.has(v.id)) { out.push({ type: "wintro", v }); shown.add(v.id); } });
+    out.push(e);
+  }
+  return out;
+}
 // ---------- progress ----------
 const LS = "kana-path-v1";
-let S = { done: {}, xp: 0, streak: 0, last: "", updatedAt: 0, speech: true };
+let S = { done: {}, xp: 0, streak: 0, last: "", updatedAt: 0, speech: true, seen: {} };
 try { const r = JSON.parse(localStorage.getItem(LS)); if (r) S = { ...S, ...r }; } catch (e) {}
+S.seen ||= {};
 let dbDoc = null, pushing = false, again = false, syncMsg = "";
 function save() { S.updatedAt = Date.now(); try { localStorage.setItem(LS, JSON.stringify(S)); } catch (e) {} push(); }
 async function push() { if (!dbDoc) return; if (pushing) { again = true; return; } pushing = true; try { await dbDoc.set(JSON.parse(JSON.stringify(S))); } catch (e) {} pushing = false; if (again) { again = false; push(); } }
@@ -677,19 +730,24 @@ function renderMap() {
     <div class="pills"><span class="pill fire" title="Дней подряд">🔥 ${streakNow()}</span><span class="pill xp" title="Опыт">★ ${S.xp}</span></div></div>`;
   if (!S.xp) html += `<div class="mn">Начните с первого кружка. В каждом уроке вы сначала знакомитесь с новыми знаками: как выглядит, как звучит, как запомнить. Потом закрепляете их в коротких упражнениях. Один урок занимает 5–7 минут.</div>`;
   COURSE.forEach((sec, si) => {
-    html += `<div class="unit-h ${sec.kata ? "kata" : ""}"><small>Раздел ${si + 1}</small><b>${sec.name}</b></div><div class="path">`;
+    const su = UNITS.filter(u => u.sec === si), sd = su.filter(u => S.done[u.id]).length;
+    html += `<div class="unit-h ${sec.kata ? "kata" : ""}"><small>Раздел ${si + 1} · ${sd} из ${su.length}</small><b>${sec.name}</b></div><div class="path">`;
     UNITS.forEach((u, i) => {
       if (u.sec !== si) return;
       const done = S.done[u.id], open = i <= nextIdx || done, next = i === nextIdx;
       const off = [0, 40, 70, 40, 0, -0][i % 4] ?? 0;
-      const glyph = u.review ? "復" : [...u.title.replace(/\s/g, "")][0];
-      html += `<button class="node ${done ? "done" : ""} ${open ? "open" : ""} ${next ? "next" : ""} ${u.kata ? "kata" : ""}" data-u="${i}" style="margin-left:${off}px" ${open ? "" : "disabled"} aria-label="${esc(u.title)}: ${esc(u.sub)}"><span class="stone">${glyph}</span><span class="lbl"><b class="jp">${esc(u.title)}</b><span>${esc(u.sub)}</span>${done ? `<div class="stars">${"★".repeat(done)}${"☆".repeat(3 - done)}</div>` : next ? `<div class="stars" style="color:var(--matcha)">Начать →</div>` : ""}</span></button>`;
+      const glyph = u.glyph || (u.review ? "復" : u.practice ? "練" : [...u.title.replace(/\s/g, "")][0]);
+      html += `<button class="node ${done ? "done" : ""} ${open ? "open" : ""} ${next ? "next" : ""} ${u.kata ? "kata" : ""}" data-u="${i}" data-locked="${open ? "" : "1"}" style="margin-left:${off}px" aria-label="${esc(u.title)}: ${esc(u.sub)}"><span class="stone">${glyph}</span><span class="lbl"><b class="${u.ru ? "" : "jp"}">${esc(u.title)}</b><span>${esc(u.sub)}</span>${done ? `<div class="stars">${"★".repeat(done)}${"☆".repeat(3 - done)}</div>` : next ? `<div class="stars" style="color:var(--matcha)">Начать →</div>` : ""}</span></button>`;
     });
     html += `</div>`;
   });
   html += `<div class="row" style="display:flex;justify-content:center;gap:10px"><button class="say" id="spk">${S.speech ? "Озвучка включена" : "Озвучка выключена"}</button></div><div class="sync">${syncMsg || "Прогресс сохраняется в этом браузере"}</div>`;
   $("#app").innerHTML = html;
-  document.querySelectorAll("[data-u]").forEach(b => b.onclick = () => startLesson(+b.dataset.u));
+  document.querySelectorAll("[data-u]").forEach(b => b.onclick = () => {
+    if (!b.dataset.locked) return startLesson(+b.dataset.u);
+    foot("", "Этот урок ещё впереди", "Лучше идти по порядку, но можно начать и сразу.", "Начать всё равно");
+    $("#cta").onclick = () => startLesson(+b.dataset.u);
+  });
   $("#spk").onclick = () => { S.speech = !S.speech; save(); renderMap(); };
   const nx = document.querySelector(".node.next"); if (nx && S.xp) nx.scrollIntoView({ block: "center" });
 }
@@ -711,15 +769,20 @@ function renderEx() {
     body = `<div class="q">Новый знак ${it.script === "k" ? "катаканы" : "хираганы"}</div><div class="big">${it.c}</div><div class="rom">${it.r}</div><div class="sound">${sayBtn(it.c)}</div><div class="mn">${h ? `Звучит как хирагана <b class="jp">${h}</b>. ${esc(MN[h] || "")}` : esc(MN[it.c] || "")}</div>`;
     setTimeout(() => say(it.c), 250);
     foot("", "", "", "Запомнил(а)");
+  } else if (e.type === "wintro") {
+    const v = e.v; S.seen[v.id] = 1;
+    body = `<div class="q">Новое слово</div><div class="big word">${esc(v.r)}</div><div class="rom">${esc(toRomaji(v.r))}</div><div style="text-align:center;font-size:22px;font-weight:800">${esc(v.m)}</div><div class="sound">${sayBtn(v.r)}</div>${v.w !== v.r ? `<div class="mn">Обычно пишется кандзи: <b class="jp" style="font-size:20px">${esc(v.w)}</b>. Пока достаточно запомнить звучание.</div>` : ""}`;
+    setTimeout(() => say(v.r), 250);
+    foot("", "", "", "Запомнил(а)");
   } else if (e.type === "rule") {
     body = `<div class="rule"><h2>${esc(e.title)}</h2>${e.body}</div>`;
     foot("", "", "", "Понятно");
   } else if (e.type === "pick") {
-    body = `<div class="q">${esc(e.q)}</div>${e.big ? `<div class="big ${e.word ? "word" : ""}">${esc(e.big)}</div>` : ""}${e.big && e.say ? `<div class="sound">${sayBtn(e.say)}</div>` : ""}<div class="opts">${e.options.map(o => `<button class="opt ${e.jpOpts ? "jpo" : ""}" data-o="${esc(o)}">${esc(o)}</button>`).join("")}</div>`;
+    body = `<div class="q">${esc(e.q)}</div>${e.big ? `<div class="big ${e.word ? "word" : ""}">${esc(e.big)}</div>` : ""}${e.big && e.say ? `<div class="sound">${sayBtn(e.say)}</div>` : ""}<div class="opts">${e.options.map(o => `<button class="opt ${e.jpOpts ? "jpo" : e.jpWords ? "jpw" : ""}" data-o="${esc(o)}">${esc(o)}</button>`).join("")}</div>`;
     foot("", "", "", "Выберите ответ", false);
   } else if (e.type === "match") {
     const left = shuffle(e.pairs.map(p => p[0])), right = shuffle(e.pairs.map(p => p[1]));
-    body = `<div class="q">${esc(e.q)}</div><div class="match"><div class="col">${left.map(x => `<button class="opt jpo" data-l="${esc(x)}">${esc(x)}</button>`).join("")}</div><div class="col">${right.map(x => `<button class="opt" data-r="${esc(x)}">${esc(x)}</button>`).join("")}</div></div>`;
+    body = `<div class="q">${esc(e.q)}</div><div class="match"><div class="col">${left.map(x => `<button class="opt ${e.words ? "jpw" : "jpo"}" data-l="${esc(x)}">${esc(x)}</button>`).join("")}</div><div class="col">${right.map(x => `<button class="opt" data-r="${esc(x)}">${esc(x)}</button>`).join("")}</div></div>`;
     foot("", "", "", "Соедините все пары", false);
   } else if (e.type === "build") {
     body = `<div class="q">${esc(e.q)}</div>${e.hint ? `<div class="rom" style="font-size:20px">${esc(e.hint)}</div>` : ""}<div class="slots" id="slots"></div><div class="tiles">${e.tiles.map((t, i) => `<button class="tile" data-t="${i}">${esc(t)}</button>`).join("")}</div>`;
